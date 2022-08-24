@@ -8,3 +8,19 @@ body {
   margin: 0; 
   font-family: Roboto, "Helvetica Neue", sans-serif; 
 }
+
+.mat-tab-nav-bar,
+.mat-tab-header {
+  border-bottom: none;
+}
+
+mat-toolbar {
+  a {
+    color: white;
+    font-size: 1rem;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

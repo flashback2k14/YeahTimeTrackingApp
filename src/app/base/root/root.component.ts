@@ -1,11 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatTabsModule } from '@angular/material/tabs';
-import { CommonModule } from '@angular/common';
+import { rootComponentModules } from '@shared/modules';
 
 type Link = {
   href: string;
@@ -15,14 +9,7 @@ type Link = {
 @Component({
   selector: 'ytt-root',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatToolbarModule,
-    MatTabsModule,
-    MatIconModule,
-    MatButtonModule,
-  ],
+  imports: [...rootComponentModules],
   templateUrl: './root.component.html',
   styleUrls: ['./root.component.scss'],
 })
@@ -34,6 +21,7 @@ export class RootComponent {
   constructor() {
     this.links = [
       { href: 'dashboard', title: 'Dashboard' },
+      { href: 'history', title: 'History' },
       { href: 'settings', title: 'Settings' },
     ];
   }

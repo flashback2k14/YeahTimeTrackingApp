@@ -9,6 +9,13 @@ export const APP_ROUTES: Routes = [
       ),
   },
   {
+    path: 'history',
+    loadComponent: () =>
+      import('./domains/history/history.component').then(
+        (c) => c.HistoryComponent
+      ),
+  },
+  {
     path: 'settings',
     loadComponent: () =>
       import('./domains/settings/settings.component').then(

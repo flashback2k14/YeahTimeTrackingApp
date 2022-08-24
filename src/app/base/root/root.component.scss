@@ -14,7 +14,7 @@
     & nav {
       margin-left: 24px;
       
-      & a {
+      & a:not(:last-child) {
         margin-right: 16px;
       }
     }
@@ -28,7 +28,7 @@
     }
   }
   
-  & main { 
+  & mat-sidenav-container { 
     grid-area: 2 / 2 / 3 / 3;
     border: 1px red solid;
   }
