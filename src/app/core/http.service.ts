@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { API_BASE_URL } from '@shared/modules';
+import { API_BASE_URL, StorageKeys } from '@shared/modules';
 
 export enum AUTH_TYPE {
   USER,
@@ -63,7 +63,7 @@ export class HttpService {
   }
 
   private _getHeadersApiToken(): HttpHeaders {
-    const apiToken = localStorage.getItem('ytt:api:token') ?? 'apitoken';
+    const apiToken = localStorage.getItem(StorageKeys.API_TOKEN) ?? 'apitoken';
 
     const headers = new HttpHeaders();
     headers.append('Content Type', 'application/json');
@@ -73,15 +73,11 @@ export class HttpService {
   }
 
   private _getHeadersWithUser(): HttpHeaders {
-    const user = localStorage.getItem('ytt:user:name') ?? 'john';
-    const pw = localStorage.getItem('ytt:user:pw') ?? 'doe';
+    const login = localStorage.getItem(StorageKeys.USER_LOGIN) ?? 'doe';
 
     const headers = new HttpHeaders();
     headers.append('Content Type', 'application/json');
-    headers.append(
-      'Authorization',
-      `Basic ${Buffer.from(`${user}:${pw}`, 'base64')}`
-    );
+    headers.append('Authorization', `Basic ${login}`);
 
     return headers;
   }

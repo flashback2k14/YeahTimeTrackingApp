@@ -13,6 +13,13 @@ export const API_BASE_URL: InjectionToken<string> = new InjectionToken<string>(
   'API_BASE_URL'
 );
 
+export class StorageKeys {
+  public static API_TOKEN = 'ytt:api:token';
+  public static USER_NAME = 'ytt:user:name';
+  public static USER_LOGIN = 'ytt:user:login';
+  public static USER_LOGGED_IN = 'ytt:user:logged:in';
+}
+
 export const rootComponentModules = [
   CommonModule,
   RouterModule,
