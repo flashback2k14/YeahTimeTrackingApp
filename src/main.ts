@@ -4,8 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
-import { APP_ROUTES } from './app/app.routes';
 import { RootComponent } from './app/base/root/root.component';
+import { APP_ROUTES } from './app/app.routes';
+import { API_BASE_URL } from './app/shared';
 
 import { environment } from './environments/environment';
 
@@ -18,5 +19,9 @@ bootstrapApplication(RootComponent, {
     importProvidersFrom(RouterModule.forRoot(APP_ROUTES)),
     importProvidersFrom(BrowserModule),
     importProvidersFrom(BrowserAnimationsModule),
+    {
+      provide: API_BASE_URL,
+      useValue: environment.apiBaseUrl,
+    },
   ],
 });
