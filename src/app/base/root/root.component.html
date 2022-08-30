@@ -2,11 +2,11 @@
   <header>
     <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
+        <button mat-icon-button class="toggle-menu-btn" (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
         <span>{{ title }}</span>
-        <nav mat-tab-nav-bar [color]="'warn'" fxShow="true" fxHide.lt-md>
+        <nav mat-tab-nav-bar [color]="'warn'">
           <a
             mat-tab-link
             *ngFor="let link of links"

@@ -11,7 +11,16 @@
   & header { 
     grid-area: 1 / 1 / 2 / 4;
     
+    & .toggle-menu-btn {
+      display: none;
+    }
+    
+    & span {
+      margin-left: 4px;
+    }
+    
     & nav {
+      display: block;
       margin-left: 24px;
       
       & a:not(:last-child) {
@@ -80,6 +89,14 @@
     
     & header {
       grid-area: 1 / 1 / 2 / 1;
+      
+      & .toggle-menu-btn {
+        display: block;
+      }
+      
+      & nav {
+        display: none;
+      }
     }
     
     & mat-sidenav-container {
