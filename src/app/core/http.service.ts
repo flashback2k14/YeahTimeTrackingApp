@@ -67,9 +67,9 @@ export class HttpService {
   private _getHeadersApiToken(): HttpHeaders {
     const apiToken = localStorage.getItem(StorageKeys.API_TOKEN) ?? 'apitoken';
 
-    const headers = new HttpHeaders();
-    headers.append('Content Type', 'application/json');
-    headers.append('X-AUTH-TOKEN', apiToken);
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('X-AUTH-TOKEN', apiToken);
 
     return headers;
   }
@@ -77,9 +77,9 @@ export class HttpService {
   private _getHeadersWithUser(): HttpHeaders {
     const login = localStorage.getItem(StorageKeys.USER_LOGIN) ?? 'doe';
 
-    const headers = new HttpHeaders();
-    headers.append('Content Type', 'application/json');
-    headers.append('Authorization', `Basic ${login}`);
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', `Basic ${login}`);
 
     return headers;
   }

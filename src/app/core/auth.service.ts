@@ -1,18 +1,25 @@
-import { Injectable } from '@angular/core';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { AUTH_TYPE, HttpService } from './http.service';
-
-import { StorageKeys } from './../shared';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { StorageKeys } from './../shared';
+
 export interface LoginResult {
-  success: boolean;
+  successful: boolean;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private _httpService: HttpService, private _router: Router) {}
+  private _snackbar: MatSnackBar;
+
+  constructor(private _httpService: HttpService, private _router: Router) {
+    this._snackbar = inject(MatSnackBar);
+  }
 
   public isLoggedIn(): boolean {
     const valid = localStorage.getItem(StorageKeys.USER_LOGGED_IN) ?? false;
@@ -23,25 +30,31 @@ export class AuthService {
   }
 
   public async login(username: string, password: string): Promise<void> {
+    const login = btoa(`${username}:${password}`);
+    localStorage.setItem(StorageKeys.USER_LOGIN, login);
+
     this._httpService
       .get<LoginResult>('/check-user', AUTH_TYPE.USER)
       .subscribe({
         next: (value: LoginResult) => {
-          if (value.success) {
-            const login = Buffer.from(
-              `${username}:${password}`,
-              'base64'
-            ).toString('utf8');
-
+          if (value.successful) {
             localStorage.setItem(StorageKeys.USER_LOGGED_IN, 'true');
-            localStorage.setItem(StorageKeys.USER_LOGIN, login);
             localStorage.setItem(StorageKeys.USER_NAME, username);
             this._router.navigate(['/dashboard']);
           } else {
             localStorage.setItem(StorageKeys.USER_LOGGED_IN, 'false');
           }
         },
-        error: (error: unknown) => console.error(error),
+        error: (error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.Forbidden) {
+            this._snackbar.open(
+              error?.error?.message ?? 'Unknown error.',
+              'Done'
+            );
+          } else {
+            console.error(error);
+          }
+        },
       });
   }
 

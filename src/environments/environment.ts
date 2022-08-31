@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: '/api',
+  apiBaseUrl: 'https://yeah-time-tracking.flbk.dev/api/time-tracking',
 };
 
 /*
