@@ -10,9 +10,11 @@ import { Observable } from 'rxjs';
 
 import { AuthService } from './auth.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthGuard implements CanActivate {
-  constructor(private _authService: AuthService, private _router: Router) {}
+  constructor(private _authService: AuthService) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -27,7 +29,6 @@ export class AuthGuard implements CanActivate {
     }
 
     console.error('not logged in');
-    this._router.navigate(['/login']);
     return false;
   }
 }

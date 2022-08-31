@@ -10,7 +10,9 @@ export enum AUTH_TYPE {
   API_TOKEN,
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class HttpService {
   constructor(
     @Inject(API_BASE_URL) private baseUrl: string,

@@ -1,7 +1,8 @@
 import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { RootComponent } from './app/base/root/root.component';
@@ -17,8 +18,9 @@ if (environment.production) {
 bootstrapApplication(RootComponent, {
   providers: [
     importProvidersFrom(RouterModule.forRoot(APP_ROUTES)),
-    importProvidersFrom(BrowserModule),
     importProvidersFrom(BrowserAnimationsModule),
+    importProvidersFrom(HttpClientModule),
+    importProvidersFrom(BrowserModule),
     {
       provide: API_BASE_URL,
       useValue: environment.apiBaseUrl,
