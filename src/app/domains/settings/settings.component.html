@@ -1,1 +1,25 @@
-<p>settings works!</p>
+<fieldset>
+  <legend>Authentication</legend>
+  <mat-form-field appearance="outline">
+    <mat-label>API Token</mat-label>
+    <input #username matInput placeholder="Please enter your API Token...">
+  </mat-form-field>
+</fieldset>
+
+<fieldset>
+  <legend>Configure time tracking actions</legend>
+  
+  <p>Eingabe von Button / Action für die Erfassung von Zeiten</p>
+</fieldset>
+
+<fieldset>
+  <legend>Actions</legend>
+  <button mat-flat-button color="primary">
+    <mat-icon>cloud_upload</mat-icon>
+    <span>Import</span>
+  </button>
+  <button mat-flat-button color="primary">
+    <mat-icon>cloud_download</mat-icon>
+    <span>Export</span>
+  </button>
+</fieldset>

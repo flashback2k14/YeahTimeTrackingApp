@@ -1,18 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { settingComponentModules } from '@shared/modules';
 
 @Component({
   selector: 'ytt-settings',
   standalone: true,
-  imports: [CommonModule],
+  imports: settingComponentModules,
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+  styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

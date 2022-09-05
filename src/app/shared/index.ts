@@ -44,3 +44,11 @@ export const authComponentModules = [
   MatInputModule,
   MatIconModule,
 ];
+
+export const settingComponentModules = [
+  CommonModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatButtonModule,
+  MatIconModule,
+];
