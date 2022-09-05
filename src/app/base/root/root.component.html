@@ -5,7 +5,7 @@
         <button mat-icon-button class="toggle-menu-btn" (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
-        <span>{{ title }}</span>
+        <span (click)="goToHome()">{{ title }}</span>
         <nav mat-tab-nav-bar [color]="'warn'">
           <a
             mat-tab-link
@@ -19,6 +19,9 @@
           </a>
         </nav>
         <span class="spacer"></span>
+        <button mat-icon-button title="Logout" *ngIf="authService.isLoggedIn()" (click)="authService.logout()">
+          <mat-icon>logout</mat-icon>
+        </button>
       </mat-toolbar-row>
     </mat-toolbar>
   </header>

@@ -17,6 +17,7 @@
     
     & span {
       margin-left: 4px;
+      cursor: pointer;
     }
     
     & nav {
@@ -35,11 +36,14 @@
     & .spacer {
       flex: 1 1 auto;
     }
+
+    & [mat-icon-button]:hover {
+      background-color: rgba(0,0,0,0.2);
+    }
   }
   
   & mat-sidenav-container { 
     grid-area: 2 / 2 / 3 / 3;
-    border: 1px red solid;
   }
   
   & footer {
