@@ -18,14 +18,14 @@ if (environment.production) {
 
 bootstrapApplication(RootComponent, {
   providers: [
+    {
+      provide: API_BASE_URL,
+      useValue: environment.apiBaseUrl,
+    },
     importProvidersFrom(RouterModule.forRoot(APP_ROUTES)),
     importProvidersFrom(BrowserModule),
     importProvidersFrom(BrowserAnimationsModule),
     importProvidersFrom(HttpClientModule),
     importProvidersFrom(MatSnackBarModule),
-    {
-      provide: API_BASE_URL,
-      useValue: environment.apiBaseUrl,
-    },
   ],
 });

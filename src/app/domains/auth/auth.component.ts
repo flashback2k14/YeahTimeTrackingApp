@@ -1,34 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
+import { Component } from '@angular/core';
 
 import { AuthService } from 'src/app/core/auth.service';
+import { authComponentModules } from '@shared/modules';
 
 @Component({
   selector: 'ytt-auth',
   standalone: true,
-  imports: [
-    MatCardModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-  ],
+  imports: authComponentModules,
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
 })
-export class AuthComponent implements OnInit {
-  hide = true;
+export class AuthComponent {
+  hidePassword: boolean;
 
-  constructor(private _authService: AuthService) {}
-
-  ngOnInit(): void {}
+  constructor(private _authService: AuthService) {
+    this.hidePassword = true;
+  }
 
   handleLogin(username: string, password: string): void {
     this._authService.login(username, password);

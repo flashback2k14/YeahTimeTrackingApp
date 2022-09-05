@@ -1,4 +1,4 @@
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AUTH_TYPE, HttpService } from './http.service';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -30,6 +30,10 @@ export class AuthService {
   }
 
   public async login(username: string, password: string): Promise<void> {
+    this._snackbar.open(`Logging in with user ${username}...`, '', {
+      duration: 1500,
+    });
+
     const login = btoa(`${username}:${password}`);
     localStorage.setItem(StorageKeys.USER_LOGIN, login);
 
@@ -46,21 +50,27 @@ export class AuthService {
           }
         },
         error: (error: HttpErrorResponse) => {
-          if (error.status === HttpStatusCode.Forbidden) {
-            this._snackbar.open(
-              error?.error?.message ?? 'Unknown error.',
-              'Done'
-            );
-          } else {
-            console.error(error);
-          }
+          this._snackbar.open(
+            error?.error?.message ?? 'Unknown error.',
+            'Done'
+          );
         },
       });
   }
 
   public logout(): void {
+    this._snackbar.open(
+      `Logging out with user ${localStorage.getItem(StorageKeys.USER_NAME)}...`,
+      '',
+      {
+        duration: 1500,
+      }
+    );
+
     localStorage.removeItem(StorageKeys.USER_LOGGED_IN);
     localStorage.removeItem(StorageKeys.USER_LOGIN);
     localStorage.removeItem(StorageKeys.USER_NAME);
+
+    this._router.navigate(['/login']);
   }
 }
