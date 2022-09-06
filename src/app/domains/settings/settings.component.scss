@@ -2,13 +2,13 @@ fieldset {
   border-radius: 4px;
   margin: 24px 0;
   
-  & legend {
+  legend {
     padding: 8px 24px;
     font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
     letter-spacing: normal;
   }
   
-  & mat-form-field {
+  mat-form-field {
     width: 100%;
     
     ::ng-deep .mat-form-field-wrapper {
@@ -16,11 +16,18 @@ fieldset {
     }
   }
   
-  & [mat-flat-button] {
+  [mat-flat-button]:not(:last-child) {
     margin-right: 16px;
-    
-    & span {
+  }
+  
+  [mat-flat-button] {
+     span {
       margin-left: 8px;
     }
+  }
+  
+  .save {
+    float: right;
+    margin-top: 6px;
   }
 }

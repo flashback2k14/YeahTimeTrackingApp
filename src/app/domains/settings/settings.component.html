@@ -2,8 +2,12 @@
   <legend>Authentication</legend>
   <mat-form-field appearance="outline">
     <mat-label>API Token</mat-label>
-    <input #username matInput placeholder="Please enter your API Token...">
+    <input [(ngModel)]="apiToken" matInput placeholder="Please enter your API Token...">
   </mat-form-field>
+  <button mat-flat-button color="primary" class="save" (click)="handleSaveApiToken()">
+    <mat-icon>save</mat-icon>
+    <span>Save</span>
+  </button>
 </fieldset>
 
 <fieldset>
@@ -14,11 +18,11 @@
 
 <fieldset>
   <legend>Actions</legend>
-  <button mat-flat-button color="primary">
+  <button mat-flat-button color="primary" (click)="handleOpenImport()">
     <mat-icon>cloud_upload</mat-icon>
     <span>Import</span>
   </button>
-  <button mat-flat-button color="primary">
+  <button mat-flat-button color="primary" (click)="handleOpenExport()">
     <mat-icon>cloud_download</mat-icon>
     <span>Export</span>
   </button>

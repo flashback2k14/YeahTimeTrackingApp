@@ -1,11 +1,14 @@
 import { InjectionToken } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -22,6 +25,10 @@ export class StorageKeys {
   public static USER_NAME = 'ytt:user:name';
   public static USER_LOGIN = 'ytt:user:login';
   public static USER_LOGGED_IN = 'ytt:user:logged:in';
+}
+
+export interface ExportFile {
+  apiToken: string;
 }
 
 export const rootComponentModules = [
@@ -47,8 +54,25 @@ export const authComponentModules = [
 
 export const settingComponentModules = [
   CommonModule,
+  FormsModule,
   MatFormFieldModule,
   MatInputModule,
   MatButtonModule,
   MatIconModule,
+  MatSnackBarModule,
+  MatDialogModule,
+];
+
+export const exportDialogComponentModules = [
+  CommonModule,
+  MatDialogModule,
+  MatButtonModule,
+];
+
+export const importDialogComponentModules = [
+  CommonModule,
+  MatDialogModule,
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule,
 ];
