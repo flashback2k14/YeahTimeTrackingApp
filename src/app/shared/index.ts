@@ -27,8 +27,26 @@ export class StorageKeys {
   public static USER_LOGGED_IN = 'ytt:user:logged:in';
 }
 
+export enum ActionCardModificationType {
+  CREATE,
+  UPDATE,
+  DELETE,
+}
+
+export interface ActionCardModificationData {
+  type: ActionCardModificationType;
+  action: TimeTrackingAction;
+}
+
+export interface TimeTrackingAction {
+  id: number;
+  name: string;
+  type: string;
+}
+
 export interface ExportFile {
   apiToken: string;
+  actions: Map<number, TimeTrackingAction>;
 }
 
 export const rootComponentModules = [
@@ -71,6 +89,15 @@ export const exportDialogComponentModules = [
 
 export const importDialogComponentModules = [
   CommonModule,
+  MatDialogModule,
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule,
+];
+
+export const actionCardModificationComponentModules = [
+  CommonModule,
+  FormsModule,
   MatDialogModule,
   MatButtonModule,
   MatFormFieldModule,

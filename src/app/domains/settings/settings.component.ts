@@ -5,7 +5,14 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { ImportDialogComponent } from '../settings/components/import-dialog/import-dialog.component';
 import { ExportDialogComponent } from '../settings/components/export-dialog/export-dialog.component';
-import { settingComponentModules, StorageKeys } from '@shared/modules';
+import {
+  ActionCardModificationData,
+  ActionCardModificationType,
+  settingComponentModules,
+  StorageKeys,
+  TimeTrackingAction,
+} from '@shared/modules';
+import { ActionCardModificationComponent } from './components/action-card-modification/action-card-modification.component';
 
 @Component({
   selector: 'ytt-settings',
@@ -16,6 +23,7 @@ import { settingComponentModules, StorageKeys } from '@shared/modules';
 })
 export class SettingsComponent {
   apiToken: string;
+  ActionCardModificationType = ActionCardModificationType;
 
   constructor(private _dialog: MatDialog, private _snackbar: MatSnackBar) {
     this.apiToken = localStorage.getItem(StorageKeys.API_TOKEN) ?? '';
@@ -26,9 +34,28 @@ export class SettingsComponent {
     localStorage.setItem(StorageKeys.API_TOKEN, this.apiToken);
   }
 
+  handleOpenActionCardModification(type: ActionCardModificationType): void {
+    this._dialog
+      .open(ActionCardModificationComponent, {
+        width: '400px',
+        disableClose: true,
+        data: {
+          type,
+          action: { id: -1, name: '', type: '' } as TimeTrackingAction,
+        } as ActionCardModificationData,
+      })
+      .afterClosed()
+      .subscribe((data: ActionCardModificationData) => {
+        console.log(data);
+      });
+  }
+
   handleOpenImport(): void {
     this._dialog
-      .open(ImportDialogComponent, { disableClose: true })
+      .open(ImportDialogComponent, {
+        width: '400px',
+        disableClose: true,
+      })
       .afterClosed()
       .subscribe(() => {
         this.apiToken = localStorage.getItem(StorageKeys.API_TOKEN) ?? '';
@@ -36,6 +63,9 @@ export class SettingsComponent {
   }
 
   handleOpenExport(): void {
-    this._dialog.open(ExportDialogComponent, { disableClose: true });
+    this._dialog.open(ExportDialogComponent, {
+      width: '400px',
+      disableClose: true,
+    });
   }
 }

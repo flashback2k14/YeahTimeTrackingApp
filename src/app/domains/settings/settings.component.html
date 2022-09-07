@@ -12,8 +12,12 @@
 
 <fieldset>
   <legend>Configure time tracking actions</legend>
-  
   <p>Eingabe von Button / Action für die Erfassung von Zeiten</p>
+  <button mat-flat-button color="primary" class="save" 
+    (click)="handleOpenActionCardModification(ActionCardModificationType.CREATE)">
+    <mat-icon>add</mat-icon>
+    <span>Add</span>
+  </button>
 </fieldset>
 
 <fieldset>
