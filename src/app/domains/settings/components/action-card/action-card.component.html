@@ -1,1 +1,16 @@
-<p>action-card works!</p>
+<mat-card>
+  <mat-card-content>
+    <p>{{ action.name }}</p>
+    <p>{{ action.type }}</p>
+  </mat-card-content>
+  
+  <button mat-flat-button color="primary" (click)="handleEdit()">
+    <mat-icon>edit</mat-icon>
+    <span>Edit</span>
+  </button>
+  
+  <button mat-flat-button color="primary" (click)="handleDelete()">
+    <mat-icon>delete</mat-icon>
+    <span>Delete</span>
+  </button>
+</mat-card>

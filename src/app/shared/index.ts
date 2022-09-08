@@ -15,6 +15,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { ActionCardComponent } from '../domains/settings/components/action-card/action-card.component';
 
 export const API_BASE_URL: InjectionToken<string> = new InjectionToken<string>(
   'API_BASE_URL'
@@ -25,6 +26,7 @@ export class StorageKeys {
   public static USER_NAME = 'ytt:user:name';
   public static USER_LOGIN = 'ytt:user:login';
   public static USER_LOGGED_IN = 'ytt:user:logged:in';
+  public static TIME_TRACKING_ACTIONS = 'ytt:actions';
 }
 
 export enum ActionCardModificationType {
@@ -39,14 +41,14 @@ export interface ActionCardModificationData {
 }
 
 export interface TimeTrackingAction {
-  id: number;
+  id: string;
   name: string;
   type: string;
 }
 
 export interface ExportFile {
   apiToken: string;
-  actions: Map<number, TimeTrackingAction>;
+  actions: Map<string, TimeTrackingAction>;
 }
 
 export const rootComponentModules = [
@@ -103,3 +105,28 @@ export const actionCardModificationComponentModules = [
   MatFormFieldModule,
   MatInputModule,
 ];
+
+export const createUuidV4 = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+    const random = (Math.random() * 16) | 0;
+    const value = char === 'x' ? random : (random % 4) + 8;
+    return value.toString(16);
+  });
+};
+
+export const toMap = (
+  storageKeyValue: string
+): Map<string, TimeTrackingAction> => {
+  const item = localStorage.getItem(storageKeyValue);
+  if (!item) {
+    return new Map<string, TimeTrackingAction>();
+  }
+
+  const obj = JSON.parse(item);
+
+  return new Map<string, TimeTrackingAction>(Object.entries(obj));
+};
+
+export const toJson = (value: Map<string, TimeTrackingAction>): string => {
+  return JSON.stringify(Object.fromEntries(value));
+};

@@ -8,25 +8,31 @@ import { ExportDialogComponent } from '../settings/components/export-dialog/expo
 import {
   ActionCardModificationData,
   ActionCardModificationType,
+  createUuidV4,
   settingComponentModules,
   StorageKeys,
   TimeTrackingAction,
+  toJson,
+  toMap,
 } from '@shared/modules';
 import { ActionCardModificationComponent } from './components/action-card-modification/action-card-modification.component';
+import { ActionCardComponent } from './components/action-card/action-card.component';
 
 @Component({
   selector: 'ytt-settings',
   standalone: true,
-  imports: settingComponentModules,
+  imports: [...settingComponentModules, ActionCardComponent],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent {
-  apiToken: string;
   ActionCardModificationType = ActionCardModificationType;
+  apiToken: string;
+  actions: Map<string, TimeTrackingAction>;
 
   constructor(private _dialog: MatDialog, private _snackbar: MatSnackBar) {
     this.apiToken = localStorage.getItem(StorageKeys.API_TOKEN) ?? '';
+    this.actions = toMap(StorageKeys.TIME_TRACKING_ACTIONS);
   }
 
   handleSaveApiToken(): void {
@@ -41,12 +47,33 @@ export class SettingsComponent {
         disableClose: true,
         data: {
           type,
-          action: { id: -1, name: '', type: '' } as TimeTrackingAction,
+          action: {
+            id: createUuidV4(),
+            name: '',
+            type: '',
+          } as TimeTrackingAction,
         } as ActionCardModificationData,
       })
       .afterClosed()
       .subscribe((data: ActionCardModificationData) => {
-        console.log(data);
+        switch (data.type) {
+          case ActionCardModificationType.CREATE:
+          case ActionCardModificationType.UPDATE:
+            this.actions.set(data.action.id, data.action);
+            break;
+
+          case ActionCardModificationType.DELETE:
+            this.actions.delete(data.action.id);
+            break;
+
+          default:
+            break;
+        }
+
+        localStorage.setItem(
+          StorageKeys.TIME_TRACKING_ACTIONS,
+          toJson(this.actions)
+        );
       });
   }
 
@@ -59,6 +86,7 @@ export class SettingsComponent {
       .afterClosed()
       .subscribe(() => {
         this.apiToken = localStorage.getItem(StorageKeys.API_TOKEN) ?? '';
+        this.actions = toMap(StorageKeys.TIME_TRACKING_ACTIONS);
       });
   }
 
