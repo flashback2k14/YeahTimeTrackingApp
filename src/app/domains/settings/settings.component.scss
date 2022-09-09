@@ -1,0 +1,39 @@
+fieldset {
+  border-radius: 4px;
+  
+  &:not(:first-child) {
+    margin: 24px 0;
+  }
+  
+  legend {
+    padding: 8px 24px;
+    font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+    letter-spacing: normal;
+  }
+  
+  [mat-flat-button]:not(:last-child) {
+    margin-right: 16px;
+  }
+  
+  [mat-flat-button] {
+     span {
+      margin-left: 8px;
+    }
+  }
+  
+  .save {
+    float: right;
+    margin-top: 6px;
+  }
+  
+  ul {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 12px;
+    padding-left: 0;
+    
+    ytt-action-card {
+      width: 250px;
+    }
+  }
+}

@@ -14,6 +14,14 @@ body {
   border-bottom: none;
 }
 
+mat-form-field {
+  width: 100%;
+  
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}
+
 mat-toolbar {
   a {
     color: white;
@@ -23,4 +31,38 @@ mat-toolbar {
       opacity: 1;
     }
   }
+}
+
+mat-divider {
+  margin-bottom: 16px !important;
+}
+
+[mat-icon-button]:hover {
+  background-color: rgba(0,0,0,0.2);
+}
+
+/* theming scrollbars */
+/* https://css-tricks.com/custom-scrollbars-in-webkit/ */
+::-webkit-scrollbar {
+  height: 4px;
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  background: #c2185b;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+  background: #c0c0c0;
 }
