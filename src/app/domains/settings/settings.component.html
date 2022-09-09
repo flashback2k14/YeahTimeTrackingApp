@@ -20,7 +20,9 @@
   <ul *ngIf="actions.size > 0">
     <ytt-action-card 
       *ngFor="let action of actions | keyvalue" 
-      [action]="action.value">
+      [action]="action.value"
+      (edit)="handleOpenActionCardModification(ActionCardModificationType.UPDATE, $event)"
+      (delete)="handleOpenActionCardModification(ActionCardModificationType.DELETE, $event)">
     </ytt-action-card>
   </ul>
   

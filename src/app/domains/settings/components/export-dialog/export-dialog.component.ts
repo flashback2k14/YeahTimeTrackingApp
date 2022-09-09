@@ -6,6 +6,7 @@ import {
   StorageKeys,
   exportDialogComponentModules,
   ExportFile,
+  toMap,
 } from '@shared/modules';
 
 @Component({
@@ -25,6 +26,7 @@ export class ExportDialogComponent {
   handleOk(): void {
     const content = {
       apiToken: localStorage.getItem(StorageKeys.API_TOKEN) ?? '',
+      actions: localStorage.getItem(StorageKeys.TIME_TRACKING_ACTIONS) ?? '',
     } as ExportFile;
 
     this._createExportFile(content);

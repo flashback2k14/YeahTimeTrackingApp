@@ -1,25 +1,33 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { TimeTrackingAction } from '@shared/modules';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+
+import {
+  actionCardComponentModules,
+  TimeTrackingAction,
+} from '@shared/modules';
 
 @Component({
   selector: 'ytt-action-card',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule],
+  imports: actionCardComponentModules,
   templateUrl: './action-card.component.html',
   styleUrls: ['./action-card.component.scss'],
 })
 export class ActionCardComponent {
   @Input() action: TimeTrackingAction;
+  @Output() edit: EventEmitter<TimeTrackingAction>;
+  @Output() delete: EventEmitter<TimeTrackingAction>;
 
   constructor() {
     this.action = {} as TimeTrackingAction;
+    this.edit = new EventEmitter<TimeTrackingAction>();
+    this.delete = new EventEmitter<TimeTrackingAction>();
   }
 
-  handleEdit(): void {}
+  handleEdit(): void {
+    this.edit.emit(this.action);
+  }
 
-  handleDelete(): void {}
+  handleDelete(): void {
+    this.delete.emit(this.action);
+  }
 }

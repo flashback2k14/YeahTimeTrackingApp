@@ -36,10 +36,6 @@
     & .spacer {
       flex: 1 1 auto;
     }
-
-    & [mat-icon-button]:hover {
-      background-color: rgba(0,0,0,0.2);
-    }
   }
   
   & mat-sidenav-container { 
@@ -48,6 +44,10 @@
     & mat-sidenav {
       width: 40%;
     }
+  }
+  
+  main {
+    padding: 0 16px;
   }
   
   & footer {

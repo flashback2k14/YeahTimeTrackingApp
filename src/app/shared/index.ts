@@ -15,7 +15,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-import { ActionCardComponent } from '../domains/settings/components/action-card/action-card.component';
 
 export const API_BASE_URL: InjectionToken<string> = new InjectionToken<string>(
   'API_BASE_URL'
@@ -48,7 +47,7 @@ export interface TimeTrackingAction {
 
 export interface ExportFile {
   apiToken: string;
-  actions: Map<string, TimeTrackingAction>;
+  actions: string;
 }
 
 export const rootComponentModules = [
@@ -106,12 +105,28 @@ export const actionCardModificationComponentModules = [
   MatInputModule,
 ];
 
+export const actionCardComponentModules = [
+  CommonModule,
+  MatCardModule,
+  MatButtonModule,
+  MatIconModule,
+  MatDividerModule,
+];
+
 export const createUuidV4 = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
     const random = (Math.random() * 16) | 0;
     const value = char === 'x' ? random : (random % 4) + 8;
     return value.toString(16);
   });
+};
+
+export const createNewTimeTrackingAction = (): TimeTrackingAction => {
+  return {
+    id: createUuidV4(),
+    name: '',
+    type: '',
+  } as TimeTrackingAction;
 };
 
 export const toMap = (

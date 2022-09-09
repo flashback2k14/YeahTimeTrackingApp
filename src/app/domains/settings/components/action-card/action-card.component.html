@@ -1,16 +1,17 @@
 <mat-card>
   <mat-card-content>
-    <p>{{ action.name }}</p>
-    <p>{{ action.type }}</p>
+    <h3>Action: {{ action.name }}</h3>
+    <mat-divider></mat-divider>
+    <p>Type: {{ action.type }}</p>
   </mat-card-content>
   
-  <button mat-flat-button color="primary" (click)="handleEdit()">
-    <mat-icon>edit</mat-icon>
-    <span>Edit</span>
-  </button>
-  
-  <button mat-flat-button color="primary" (click)="handleDelete()">
-    <mat-icon>delete</mat-icon>
-    <span>Delete</span>
-  </button>
+  <mat-card-actions align="end">
+    <button mat-icon-button color="primary" (click)="handleEdit()">
+      <mat-icon>edit</mat-icon>
+    </button>
+    
+    <button mat-icon-button color="warn" (click)="handleDelete()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-actions>
 </mat-card>

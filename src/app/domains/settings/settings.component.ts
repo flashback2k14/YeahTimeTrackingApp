@@ -8,6 +8,7 @@ import { ExportDialogComponent } from '../settings/components/export-dialog/expo
 import {
   ActionCardModificationData,
   ActionCardModificationType,
+  createNewTimeTrackingAction,
   createUuidV4,
   settingComponentModules,
   StorageKeys,
@@ -40,18 +41,17 @@ export class SettingsComponent {
     localStorage.setItem(StorageKeys.API_TOKEN, this.apiToken);
   }
 
-  handleOpenActionCardModification(type: ActionCardModificationType): void {
+  handleOpenActionCardModification(
+    type: ActionCardModificationType,
+    action: TimeTrackingAction = createNewTimeTrackingAction()
+  ): void {
     this._dialog
       .open(ActionCardModificationComponent, {
         width: '400px',
         disableClose: true,
         data: {
           type,
-          action: {
-            id: createUuidV4(),
-            name: '',
-            type: '',
-          } as TimeTrackingAction,
+          action: { ...action },
         } as ActionCardModificationData,
       })
       .afterClosed()
