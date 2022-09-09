@@ -3,26 +3,25 @@ import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 
+import { ActionCardModificationComponent } from './components/action-card-modification/action-card-modification.component';
+import { ActionSettingsCardComponent } from './components/action-settings-card/action-settings-card.component';
 import { ImportDialogComponent } from '../settings/components/import-dialog/import-dialog.component';
 import { ExportDialogComponent } from '../settings/components/export-dialog/export-dialog.component';
 import {
   ActionCardModificationData,
   ActionCardModificationType,
   createNewTimeTrackingAction,
-  createUuidV4,
   settingComponentModules,
   StorageKeys,
   TimeTrackingAction,
   toJson,
   toMap,
 } from '@shared/modules';
-import { ActionCardModificationComponent } from './components/action-card-modification/action-card-modification.component';
-import { ActionCardComponent } from './components/action-card/action-card.component';
 
 @Component({
   selector: 'ytt-settings',
   standalone: true,
-  imports: [...settingComponentModules, ActionCardComponent],
+  imports: [...settingComponentModules, ActionSettingsCardComponent],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
 })

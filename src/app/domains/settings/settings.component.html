@@ -18,12 +18,12 @@
   <span *ngIf="actions.size <= 0">No actions defined.</span>
   
   <ul *ngIf="actions.size > 0">
-    <ytt-action-card 
+    <ytt-action-settings-card 
       *ngFor="let action of actions | keyvalue" 
       [action]="action.value"
       (edit)="handleOpenActionCardModification(ActionCardModificationType.UPDATE, $event)"
       (delete)="handleOpenActionCardModification(ActionCardModificationType.DELETE, $event)">
-    </ytt-action-card>
+    </ytt-action-settings-card>
   </ul>
   
   <button mat-flat-button color="primary" class="save" 

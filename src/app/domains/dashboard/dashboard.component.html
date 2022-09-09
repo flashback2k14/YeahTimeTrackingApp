@@ -1,1 +1,11 @@
-<p>dashboard works!</p>
+<span *ngIf="isLoading">Data loading...</span>
+
+<span *ngIf="!isLoading && actions.size <= 0">No actions defined.</span>
+  
+<ul *ngIf="!isLoading && actions.size > 0">
+  <ytt-action-dashboard-card 
+    *ngFor="let action of actions | keyvalue" 
+    [action]="action.value"
+    [isStarted]="action.value.isStarted">
+  </ytt-action-dashboard-card>
+</ul>

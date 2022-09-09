@@ -1,18 +1,18 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import {
-  actionCardComponentModules,
+  actionSettingsCardComponentModules,
   TimeTrackingAction,
 } from '@shared/modules';
 
 @Component({
-  selector: 'ytt-action-card',
+  selector: 'ytt-action-settings-card',
   standalone: true,
-  imports: actionCardComponentModules,
-  templateUrl: './action-card.component.html',
-  styleUrls: ['./action-card.component.scss'],
+  imports: actionSettingsCardComponentModules,
+  templateUrl: './action-settings-card.component.html',
+  styleUrls: ['./action-settings-card.component.scss'],
 })
-export class ActionCardComponent {
+export class ActionSettingsCardComponent {
   @Input() action: TimeTrackingAction;
   @Output() edit: EventEmitter<TimeTrackingAction>;
   @Output() delete: EventEmitter<TimeTrackingAction>;

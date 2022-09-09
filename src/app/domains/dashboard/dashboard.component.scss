@@ -1,0 +1,11 @@
+ul {
+  display: flex;
+  justify-content: center;
+  flex-flow: row wrap;
+  gap: 12px;
+  padding-left: 0;
+  
+  ytt-action-dashboard-card {
+    width: 250px;
+  }
+}
