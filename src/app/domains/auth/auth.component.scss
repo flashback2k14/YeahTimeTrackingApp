@@ -5,18 +5,10 @@
   
   height: calc(100vh -  64px - 36px - 2ch - 1ch);
   
-  & mat-card {
+  mat-card {
     width: 400px;
     
-    & mat-form-field {
-      width: 100%;
-      
-      ::ng-deep .mat-form-field-wrapper {
-          padding-bottom: 0;
-      }
-    }
-    
-    & button[mat-flat-button] {
+    button[mat-flat-button] {
       float: right;
     }
   }

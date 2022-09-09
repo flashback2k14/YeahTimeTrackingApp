@@ -11,14 +11,6 @@ fieldset {
     letter-spacing: normal;
   }
   
-  mat-form-field {
-    width: 100%;
-    
-    ::ng-deep .mat-form-field-wrapper {
-        padding-bottom: 0;
-    }
-  }
-  
   [mat-flat-button]:not(:last-child) {
     margin-right: 16px;
   }
