@@ -53,7 +53,7 @@ export interface TimeTrackingActionExtended {
 }
 
 export interface ActiveTasksResponse {
-  active_tasks: string[]
+  active_tasks: string[];
 }
 
 export interface ExportFile {
@@ -130,6 +130,8 @@ export const actionDashboardCardComponentModules = [
   MatButtonModule,
   MatIconModule,
 ];
+
+export const dashboardComponentModules = [CommonModule, MatIconModule];
 
 export const createUuidV4 = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
