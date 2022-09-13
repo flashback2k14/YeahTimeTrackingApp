@@ -1,1 +1,20 @@
-<p>dashboard works!</p>
+<div *ngIf="isLoading" class="loading-container">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+  <h3>loading time tracking actions...</h3>
+</div>
+
+<div *ngIf="!isLoading && actions.size <= 0" class="no-data-container">
+  <mat-icon style="scale: 2;">folder_off</mat-icon>
+  <h3>No actions defined.</h3>
+</div>
+  
+<ul *ngIf="!isLoading && actions.size > 0">
+  <ytt-action-dashboard-card 
+    *ngFor="let action of actions | keyvalue" 
+    [action]="action.value"
+    [isStarted]="action.value.isStarted">
+  </ytt-action-dashboard-card>
+</ul>

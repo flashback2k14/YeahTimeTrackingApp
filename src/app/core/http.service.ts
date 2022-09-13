@@ -1,9 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { inject, Inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
 import { API_BASE_URL, StorageKeys } from '@shared/modules';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export enum AUTH_TYPE {
   USER,
@@ -14,10 +15,14 @@ export enum AUTH_TYPE {
   providedIn: 'root',
 })
 export class HttpService {
+   private _snackbar: MatSnackBar;
+  
   constructor(
     @Inject(API_BASE_URL) private baseUrl: string,
     private http: HttpClient
-  ) {}
+  ) {
+    this._snackbar = inject(MatSnackBar);
+  }
 
   get<T>(
     route: string,
@@ -82,5 +87,12 @@ export class HttpService {
       .append('Authorization', `Basic ${login}`);
 
     return headers;
+  }
+  
+  public showErrorResponse(error: HttpErrorResponse): void {
+    this._snackbar.open(
+      error?.error?.message ?? 'Unknown error.',
+      'Done'
+    );
   }
 }

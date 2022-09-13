@@ -1,15 +1,54 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component } from '@angular/core';
+
+import { ActionDashboardCardComponent } from './components/action-dashboard-card/action-dashboard-card.component';
+import { AUTH_TYPE, HttpService } from 'src/app/core/http.service';
+import {
+  ActiveTasksResponse,
+  dashboardComponentModules,
+  StorageKeys,
+  TimeTrackingActionExtended,
+  toMap,
+} from '@shared/modules';
 
 @Component({
   selector: 'ytt-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [...dashboardComponentModules, ActionDashboardCardComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
-  constructor() {}
+export class DashboardComponent {
+  isLoading: boolean;
+  actions: Map<string, TimeTrackingActionExtended>;
 
-  ngOnInit(): void {}
+  constructor(private _httpservice: HttpService) {
+    this.isLoading = true;
+    this.actions = new Map<string, TimeTrackingActionExtended>();
+
+    const settingActions = toMap(StorageKeys.TIME_TRACKING_ACTIONS);
+    if (settingActions.size <= 0) {
+      this.isLoading = false;
+      return;
+    }
+
+    this._httpservice
+      .get<ActiveTasksResponse>('/active-tasks', AUTH_TYPE.API_TOKEN)
+      .subscribe({
+        next: (response: ActiveTasksResponse) => {
+          for (const settingAction of settingActions.values()) {
+            this.actions.set(settingAction.id, {
+              ...settingAction,
+              isStarted:
+                response.active_tasks.findIndex(
+                  (activeTask: string) => settingAction.type === activeTask
+                ) != -1,
+            });
+          }
+        },
+        error: (error: HttpErrorResponse) =>
+          this._httpservice.showErrorResponse(error),
+        complete: () => (this.isLoading = false),
+      });
+  }
 }
