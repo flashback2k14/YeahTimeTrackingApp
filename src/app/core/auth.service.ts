@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { AUTH_TYPE, HttpService } from './http.service';
 import { inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -17,7 +17,11 @@ export interface LoginResult {
 export class AuthService {
   private _snackbar: MatSnackBar;
 
-  constructor(private _httpService: HttpService, private _router: Router) {
+  constructor(
+    private _httpService: HttpService,
+    private _router: Router,
+    private _route: ActivatedRoute
+  ) {
     this._snackbar = inject(MatSnackBar);
   }
 
@@ -44,7 +48,10 @@ export class AuthService {
           if (value.successful) {
             localStorage.setItem(StorageKeys.USER_LOGGED_IN, 'true');
             localStorage.setItem(StorageKeys.USER_NAME, username);
-            this._router.navigate(['/dashboard']);
+
+            const returnUrl =
+              this._route.snapshot?.queryParams['returnUrl'] ?? '/dashboard';
+            this._router.navigateByUrl(returnUrl);
           } else {
             localStorage.setItem(StorageKeys.USER_LOGGED_IN, 'false');
           }
