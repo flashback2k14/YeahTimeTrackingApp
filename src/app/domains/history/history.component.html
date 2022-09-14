@@ -1,1 +1,32 @@
-<p>history works!</p>
+<table mat-table [dataSource]="data" matSort matSortActive="modified" matSortDisableClear matSortDirection="desc">
+  <!-- modified Column -->
+  <ng-container matColumnDef="modified">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+      Modified
+    </th>
+    <td mat-cell *matCellDef="let row">{{row.modified | date}}</td>
+  </ng-container>
+  
+  <!-- state Column -->
+  <ng-container matColumnDef="state">
+    <th mat-header-cell *matHeaderCellDef>State</th>
+    <td mat-cell *matCellDef="let row">{{row.state.name}}</td>
+  </ng-container>
+  
+  <!-- duration Column -->
+  <ng-container matColumnDef="duration">
+    <th mat-header-cell *matHeaderCellDef>Duration</th>
+    <td mat-cell *matCellDef="let row">{{row.duration}}</td>
+  </ng-container>
+
+  <!-- comment Column -->
+  <ng-container matColumnDef="comment">
+    <th mat-header-cell *matHeaderCellDef>Comment</th>
+    <td mat-cell *matCellDef="let row">{{row.comment}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<mat-paginator [length]="resultsLength" [pageSize]="10" aria-label="Select page of history results"></mat-paginator>
