@@ -5,7 +5,7 @@
   
   <mat-card-actions>
     <button mat-icon-button 
-      color="{{ isStarted ? 'warn' : 'primary' }}" 
+      color="{{ isStarted ? 'warn' : '' }}" 
       title="{{ isStarted ? 'Stop action' : 'Start action' }}"
       (click)="handleClick()">
       <mat-icon svgIcon="{{ isStarted ? 'stop' : 'play' }}"></mat-icon>

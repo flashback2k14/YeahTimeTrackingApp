@@ -1,0 +1,21 @@
+.container {
+  height: calc(100vh -  64px - 36px - 2ch - 1ch);
+  
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  &--hidden {
+    visibility: collapse;
+  }
+  
+  table {
+    width: 100%;
+  }
+
+  .mat-table-sticky-border-elem-bottom {
+    border-top: 1px solid #ffffff1f;
+  }
+}

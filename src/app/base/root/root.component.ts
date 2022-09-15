@@ -97,5 +97,12 @@ export class RootComponent {
         '../assets/svg/timer-stop-outline.svg'
       )
     );
+    
+    this._iconRegistry.addSvgIcon(
+      'reload',
+      this._sanitizer.bypassSecurityTrustResourceUrl(
+        '../assets/svg/reload.svg'
+      )
+    );
   }
 }

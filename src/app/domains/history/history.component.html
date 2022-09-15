@@ -1,1 +1,71 @@
-<p>history works!</p>
+<ytt-loading *ngIf="isLoading">
+  <h3>loading history...</h3>
+</ytt-loading>
+
+<div [ngClass]="{ 'container': true, 'container--hidden': isLoading }">
+  <table mat-table [dataSource]="pagedData" matSort matSortActive="modified" matSortDisableClear matSortDirection="desc">
+    <!-- index Column -->
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let row">{{ row.index }}</td>
+      <td mat-footer-cell *matFooterCellDef colspan="5">
+        <div class="container__footer">
+          <button mat-icon-button (click)="handleReload()">
+            <mat-icon svgIcon="reload"></mat-icon>
+          </button>
+          <mat-paginator 
+            [length]="resultsLength" 
+            [pageSize]="pageSize" 
+            [pageSizeOptions]="pageSizeOptions" 
+            (page)="handlePaging($event)" 
+            aria-label="Select page of history results">
+          </mat-paginator>
+        </div>
+      </td>
+    </ng-container>
+    
+    <!-- modified Column -->
+    <ng-container matColumnDef="modified">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+        Modified
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.modified | date }}</td>
+    </ng-container>
+    
+    <!-- state Column -->
+    <ng-container matColumnDef="state">
+      <th mat-header-cell *matHeaderCellDef>State</th>
+      <td mat-cell *matCellDef="let row">
+        <mat-chip-list>
+          <mat-chip color="{{ row.state.color === 'brown' ? 'accent' : 'primary' }}" selected>{{ row.state.name }}</mat-chip>
+        </mat-chip-list>
+      </td>
+    </ng-container>
+    
+    <!-- duration Column -->
+    <ng-container matColumnDef="duration">
+      <th mat-header-cell *matHeaderCellDef>Duration</th>
+      <td mat-cell *matCellDef="let row">{{ row.duration | yttRelativeTime }}</td>
+    </ng-container>
+
+    <!-- comment Column -->
+    <ng-container matColumnDef="comment">
+      <th mat-header-cell *matHeaderCellDef>Comment</th>
+      <td mat-cell *matCellDef="let row">{{ row.comment }}</td>
+    </ng-container>
+
+    <!-- data rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="[displayedColumns[0]]; sticky: true"></tr>
+    
+    <!-- no data row -->
+    <tr class="mat-row no-row-color" *matNoDataRow>
+      <td class="mat-cell" colspan="8" style="text-align: center">
+        <h3 style="margin: 0.75rem">No history data found.</h3>
+      </td>
+    </tr>
+  </table>
+
+ 
+</div>

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 
 import { ActionDashboardCardComponent } from './components/action-dashboard-card/action-dashboard-card.component';
 import { AUTH_TYPE, HttpService } from 'src/app/core/http.service';
+import { LoadingComponent } from '@shared/components';
 import {
   ActiveTasksResponse,
   dashboardComponentModules,
@@ -14,7 +15,11 @@ import {
 @Component({
   selector: 'ytt-dashboard',
   standalone: true,
-  imports: [...dashboardComponentModules, ActionDashboardCardComponent],
+  imports: [
+    ...dashboardComponentModules,
+    ActionDashboardCardComponent,
+    LoadingComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
