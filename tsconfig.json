@@ -21,7 +21,8 @@
     "lib": ["es2020", "dom"],
     "types": ["node"],
     "paths": {
-      "@shared/modules": ["src/app/shared/index.ts"]
+      "@shared/modules": ["src/app/shared/index.ts"],
+      "@shared/components": ["src/app/shared/components/index.ts"]
     }
   },
   "angularCompilerOptions": {

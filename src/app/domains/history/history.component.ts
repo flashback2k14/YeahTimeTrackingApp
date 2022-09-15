@@ -5,10 +5,11 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 
 import { HistoryResponse, HistoryTask, HistoryItem } from './models';
-import { historyComponentModules } from '@shared/modules';
-import { HttpService } from 'src/app/core/http.service';
 import { RelativeTimePipe } from './pipes/relative-time.pipe';
-import { LoadingComponent } from 'src/app/shared/components/loading/loading.component';
+import { HttpService } from 'src/app/core/http.service';
+
+import { historyComponentModules } from '@shared/modules';
+import { LoadingComponent } from '@shared/components';
 
 // https://material.angular.io/components/table/examples
 // https://www.youtube.com/watch?v=2oTyoD3qCog
