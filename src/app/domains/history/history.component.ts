@@ -1,27 +1,23 @@
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
-import { MatTableModule } from '@angular/material/table';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 import { HistoryResponse, HistoryTask, HistoryItem } from './models';
+import { historyComponentModules } from '@shared/modules';
 import { HttpService } from 'src/app/core/http.service';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import {
-  catchError,
-  map,
-  merge,
-  of,
-  startWith,
-  switchMap,
-  throwError,
-} from 'rxjs';
+import { RelativeTimePipe } from './pipes/relative-time.pipe';
+import { LoadingComponent } from 'src/app/shared/components/loading/loading.component';
+
+// https://material.angular.io/components/table/examples
+// https://www.youtube.com/watch?v=2oTyoD3qCog
+// https://stackblitz.com/edit/angular-material-table-row-grouping?file=src%2Fapp%2Fapp.component.ts
 
 @Component({
   selector: 'ytt-history',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule],
+  imports: [...historyComponentModules, RelativeTimePipe, LoadingComponent],
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.scss'],
 })
@@ -29,43 +25,63 @@ export class HistoryComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns: string[] = ['modified', 'state', 'duration', 'comment'];
+  displayedColumns: string[] = [
+    'index',
+    'modified',
+    'state',
+    'duration',
+    'comment',
+  ];
   data: HistoryItem[] = [];
-  resultsLength = 0;
+  pagedData: HistoryItem[] = [];
 
-  constructor(private _httpService: HttpService) {}
+  // MatPaginator Inputs
+  pageSize = 25;
+  resultsLength = 0;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+
+  isLoading: boolean = false;
+
+  constructor(private _httpService: HttpService) {
+    this._load();
+  }
 
   ngAfterViewInit(): void {
-    // If the user changes the sort order, reset back to the first page.
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    this.sort.sortChange.subscribe(() => {
+      this._resetPaging();
+    });
+  }
 
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          // TODO: API / notion only returns 100 items
-          return this._httpService
-            .get<HistoryResponse>('/history')
-            .pipe(catchError(() => of(null)));
-        }),
-        map((data: HistoryResponse | null) => {
-          // Flip flag to show that loading has finished.
-          if (data === null) {
-            return [];
-          }
+  handleReload(): void {
+    this._load();
+  }
 
-          // Only refresh the result length if there is new data. In case of rate
-          // limit errors, we do not want to reset the paginator to zero, as that
-          // would prevent users from re-triggering requests.
-          this.resultsLength = data.historyTasks.length;
-          return data.historyTasks;
-        })
-      )
-      .subscribe(
-        (data: HistoryTask[]) =>
-          (this.data = data.map((task: HistoryTask) =>
-            HistoryItem.create(task)
-          ))
-      );
+  handlePaging(event: PageEvent): void {
+    const start = event.pageIndex * event.pageSize;
+    const end = start + event.pageSize;
+    this.pagedData = this.data.slice(start, end);
+  }
+
+  private _load(): void {
+    this.isLoading = true;
+    this._httpService.get<HistoryResponse>('/history').subscribe({
+      next: (data: HistoryResponse) => {
+        this.resultsLength = data.historyTasks.length;
+
+        this.data = data.historyTasks.map((task: HistoryTask, index: number) =>
+          HistoryItem.create(task, index)
+        );
+
+        this._resetPaging();
+      },
+      error: (error: HttpErrorResponse) =>
+        this._httpService.showErrorResponse(error),
+      complete: () => (this.isLoading = false),
+    });
+  }
+
+  private _resetPaging(): void {
+    this.paginator.pageIndex = 0;
+    this.pagedData = this.data.slice(0, this.paginator.pageSize);
   }
 }

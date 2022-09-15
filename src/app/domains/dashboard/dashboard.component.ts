@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 
 import { ActionDashboardCardComponent } from './components/action-dashboard-card/action-dashboard-card.component';
+import { LoadingComponent } from 'src/app/shared/components/loading/loading.component';
 import { AUTH_TYPE, HttpService } from 'src/app/core/http.service';
 import {
   ActiveTasksResponse,
@@ -14,7 +15,11 @@ import {
 @Component({
   selector: 'ytt-dashboard',
   standalone: true,
-  imports: [...dashboardComponentModules, ActionDashboardCardComponent],
+  imports: [
+    ...dashboardComponentModules,
+    ActionDashboardCardComponent,
+    LoadingComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })

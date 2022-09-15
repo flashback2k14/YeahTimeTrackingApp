@@ -1,10 +1,6 @@
-<div *ngIf="isLoading" class="loading-container">
-  <div class="lds-ripple">
-    <div></div>
-    <div></div>
-  </div>
+<ytt-loading *ngIf="isLoading">
   <h3>loading time tracking actions...</h3>
-</div>
+</ytt-loading>
 
 <div *ngIf="!isLoading && actions.size <= 0" class="no-data-container">
   <mat-icon svgIcon="no-data" style="scale: 2;"></mat-icon>

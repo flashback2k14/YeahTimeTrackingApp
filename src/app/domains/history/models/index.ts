@@ -128,8 +128,9 @@ export class HistoryItem {
   public state: Select = {} as Select;
   public type: string = '';
   public id: string = '';
+  public index: number = -1;
 
-  public static create(item: HistoryTask): HistoryItem {
+  public static create(item: HistoryTask, index: number): HistoryItem {
     const flatted = {
       parentDbId: item.parent.database_id,
       modified: item.properties.Modified.last_edited_time,
@@ -139,6 +140,7 @@ export class HistoryItem {
       duration: item.properties.Duration.formula.number,
       type: item.properties.Type.rich_text[0]?.plain_text ?? 'no type',
       id: item.properties.ID.title[0]?.plain_text ?? 'no id',
+      index: index + 1,
     } as HistoryItem;
 
     return flatted;
