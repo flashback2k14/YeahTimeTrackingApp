@@ -6,6 +6,8 @@ import {
   ActionCardModificationType,
   actionCardModificationComponentModules,
   ActionCardModificationData,
+  toArray,
+  StorageKeys,
 } from '@shared/modules';
 
 @Component({
@@ -17,11 +19,14 @@ import {
 })
 export class ActionCardModificationComponent {
   ActionCardModificationType = ActionCardModificationType;
+  actionGroups: string[];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: ActionCardModificationData,
     private _dialogRef: MatDialogRef<ActionCardModificationComponent>
-  ) {}
+  ) {
+    this.actionGroups = toArray(StorageKeys.TIME_TRACKING_GROUPS);
+  }
 
   handleCancel(): void {
     this._dialogRef.close();

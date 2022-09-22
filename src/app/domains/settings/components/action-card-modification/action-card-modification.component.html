@@ -12,6 +12,15 @@
       <mat-label>Type</mat-label>
       <input [(ngModel)]="data.action.type" matInput placeholder="Please enter an action type...">
     </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Select an action group</mat-label>
+      <mat-select [(value)]="data.action.group">
+        <mat-option>None</mat-option>
+        <mat-option *ngFor="let actionGroup of actionGroups" 
+          [value]="actionGroup">{{ actionGroup }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
   
   <div mat-dialog-content *ngIf="data.type === ActionCardModificationType.DELETE">
