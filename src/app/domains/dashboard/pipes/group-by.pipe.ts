@@ -30,8 +30,6 @@ export class GroupByPipe implements PipeTransform {
       new Map<string, TimeTrackingActionExtended[]>()
     );
 
-    console.log(values);
-
     return values;
   }
 }
