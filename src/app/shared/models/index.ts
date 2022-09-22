@@ -27,6 +27,7 @@ export interface TimeTrackingAction {
 
 export interface TimeTrackingActionExtended extends TimeTrackingAction {
   isStarted: boolean;
+  [key: string]: any;
 }
 
 export interface ActiveTasksResponse {

@@ -92,7 +92,11 @@ export const actionDashboardCardComponentModules = [
   MatIconModule,
 ];
 
-export const dashboardComponentModules = [CommonModule, MatIconModule];
+export const dashboardComponentModules = [
+  CommonModule,
+  MatIconModule,
+  MatDividerModule,
+];
 
 export const historyComponentModules = [
   CommonModule,

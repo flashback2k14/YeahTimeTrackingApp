@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { ActionDashboardCardComponent } from './components/action-dashboard-card/action-dashboard-card.component';
 import { AUTH_TYPE, HttpService } from 'src/app/core/http.service';
 import { LoadingComponent } from '@shared/components';
+import { GroupByPipe } from './pipes/group-by.pipe';
 import {
   ActiveTasksResponse,
   dashboardComponentModules,
@@ -19,6 +20,7 @@ import {
     ...dashboardComponentModules,
     ActionDashboardCardComponent,
     LoadingComponent,
+    GroupByPipe,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
