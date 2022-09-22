@@ -4,6 +4,7 @@ export class StorageKeys {
   public static USER_LOGIN = 'ytt:user:login';
   public static USER_LOGGED_IN = 'ytt:user:logged:in';
   public static TIME_TRACKING_ACTIONS = 'ytt:actions';
+  public static TIME_TRACKING_GROUPS = 'ytt:groups';
 }
 
 export enum ActionCardModificationType {
@@ -21,13 +22,12 @@ export interface TimeTrackingAction {
   id: string;
   name: string;
   type: string;
+  group: string;
 }
 
-export interface TimeTrackingActionExtended {
-  id: string;
-  name: string;
-  type: string;
+export interface TimeTrackingActionExtended extends TimeTrackingAction {
   isStarted: boolean;
+  [key: string]: any;
 }
 
 export interface ActiveTasksResponse {
@@ -36,5 +36,6 @@ export interface ActiveTasksResponse {
 
 export interface ExportFile {
   apiToken: string;
+  groups: string;
   actions: string;
 }

@@ -29,6 +29,26 @@ export const toMap = (
   return new Map<string, TimeTrackingAction>(Object.entries(obj));
 };
 
+export const toArray = (storageKeyValue: string): string[] => {
+  const item = localStorage.getItem(storageKeyValue);
+  if (!item) {
+    return new Array<string>();
+  }
+
+  const arr = JSON.parse(item);
+
+  return arr as string[];
+};
+
+export const toString = (storageKeyValue: string): string => {
+  const item = localStorage.getItem(storageKeyValue);
+  if (!item) {
+    return '';
+  }
+
+  return item as string;
+};
+
 export const toJson = (value: Map<string, TimeTrackingAction>): string => {
   return JSON.stringify(Object.fromEntries(value));
 };

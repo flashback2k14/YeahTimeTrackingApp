@@ -25,6 +25,7 @@ export class ImportDialogComponent {
   handleOk(importArea: HTMLTextAreaElement): void {
     const exportFile = JSON.parse(importArea.value) as ExportFile;
     localStorage.setItem(StorageKeys.API_TOKEN, exportFile.apiToken);
+    localStorage.setItem(StorageKeys.TIME_TRACKING_GROUPS, exportFile.groups);
     localStorage.setItem(StorageKeys.TIME_TRACKING_ACTIONS, exportFile.actions);
     this._dialogRef.close();
   }

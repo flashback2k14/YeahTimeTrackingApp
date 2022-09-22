@@ -18,6 +18,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSelectModule } from '@angular/material/select';
 
 export const rootComponentModules = [
   CommonModule,
@@ -49,6 +50,7 @@ export const settingComponentModules = [
   MatIconModule,
   MatSnackBarModule,
   MatDialogModule,
+  MatChipsModule,
 ];
 
 export const exportDialogComponentModules = [
@@ -72,6 +74,7 @@ export const actionCardModificationComponentModules = [
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
+  MatSelectModule,
 ];
 
 export const actionSettingsCardComponentModules = [
@@ -89,7 +92,11 @@ export const actionDashboardCardComponentModules = [
   MatIconModule,
 ];
 
-export const dashboardComponentModules = [CommonModule, MatIconModule];
+export const dashboardComponentModules = [
+  CommonModule,
+  MatIconModule,
+  MatDividerModule,
+];
 
 export const historyComponentModules = [
   CommonModule,
