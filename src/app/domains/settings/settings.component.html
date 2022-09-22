@@ -24,6 +24,9 @@
           [value]="actionGroup"
           (removed)="removeActionGroup(actionGroup)">
         {{actionGroup}}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
       </mat-chip>
       <input
         placeholder="Add new action group..."
