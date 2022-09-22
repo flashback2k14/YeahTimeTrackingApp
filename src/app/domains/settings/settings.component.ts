@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+import { MatChipInputEvent } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -14,8 +15,10 @@ import {
   settingComponentModules,
   StorageKeys,
   TimeTrackingAction,
+  toArray,
   toJson,
   toMap,
+  toString,
 } from '@shared/modules';
 
 @Component({
@@ -28,17 +31,52 @@ import {
 export class SettingsComponent {
   ActionCardModificationType = ActionCardModificationType;
   apiToken: string;
+  actionGroups: string[];
   actions: Map<string, TimeTrackingAction>;
 
   constructor(private _dialog: MatDialog, private _snackbar: MatSnackBar) {
-    this.apiToken = localStorage.getItem(StorageKeys.API_TOKEN) ?? '';
+    this.apiToken = toString(StorageKeys.API_TOKEN);
+    this.actionGroups = toArray(StorageKeys.TIME_TRACKING_GROUPS);
     this.actions = toMap(StorageKeys.TIME_TRACKING_ACTIONS);
   }
+
+  /**
+   * API TOKEN
+   */
 
   handleSaveApiToken(): void {
     this._snackbar.open('Saving API token...', '', { duration: 1000 });
     localStorage.setItem(StorageKeys.API_TOKEN, this.apiToken);
   }
+
+  /**
+   * ACTION GROUPS
+   */
+
+  addActionGroupFromInput(event: MatChipInputEvent) {
+    if (event.value) {
+      this.actionGroups.push(event.value);
+      event.chipInput!.clear();
+    }
+  }
+
+  removeActionGroup(actionGroup: string): void {
+    this.actionGroups = this.actionGroups.filter(
+      (group: string) => group !== actionGroup
+    );
+  }
+
+  handleSaveActionGroups(): void {
+    this._snackbar.open('Saving action groups...', '', { duration: 1000 });
+    localStorage.setItem(
+      StorageKeys.TIME_TRACKING_GROUPS,
+      JSON.stringify(this.actionGroups)
+    );
+  }
+
+  /**
+   * TIME TRACKING ACTIONS
+   */
 
   handleOpenActionCardModification(
     type: ActionCardModificationType,
@@ -76,6 +114,10 @@ export class SettingsComponent {
       });
   }
 
+  /**
+   * ACTIONS
+   */
+
   handleOpenImport(): void {
     this._dialog
       .open(ImportDialogComponent, {
@@ -84,7 +126,8 @@ export class SettingsComponent {
       })
       .afterClosed()
       .subscribe(() => {
-        this.apiToken = localStorage.getItem(StorageKeys.API_TOKEN) ?? '';
+        this.apiToken = toString(StorageKeys.API_TOKEN) ?? '';
+        this.actionGroups = toArray(StorageKeys.TIME_TRACKING_GROUPS);
         this.actions = toMap(StorageKeys.TIME_TRACKING_ACTIONS);
       });
   }

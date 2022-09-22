@@ -49,6 +49,7 @@ export const settingComponentModules = [
   MatIconModule,
   MatSnackBarModule,
   MatDialogModule,
+  MatChipsModule,
 ];
 
 export const exportDialogComponentModules = [

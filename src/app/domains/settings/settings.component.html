@@ -13,6 +13,32 @@
 </fieldset>
 
 <fieldset>
+  <legend>Define groups for time tracking actions</legend>
+  
+  <mat-form-field appearance="outline">
+    <mat-label>Action groups</mat-label>
+    <mat-chip-list #chipList multiple>
+      <mat-chip
+          *ngFor="let actionGroup of actionGroups"
+          [selected]="actionGroup"
+          [value]="actionGroup"
+          (removed)="removeActionGroup(actionGroup)">
+        {{actionGroup}}
+      </mat-chip>
+      <input
+        placeholder="Add new action group..."
+        [matChipInputFor]="chipList"
+        (matChipInputTokenEnd)="addActionGroupFromInput($event)">
+    </mat-chip-list>
+  </mat-form-field>
+  
+  <button mat-flat-button color="primary" class="save" (click)="handleSaveActionGroups()">
+    <mat-icon svgIcon="save"></mat-icon>
+    <span>Save</span>
+  </button>
+</fieldset>
+
+<fieldset>
   <legend>Configure time tracking actions</legend>
   
   <span *ngIf="actions.size <= 0">No actions defined.</span>

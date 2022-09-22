@@ -15,6 +15,8 @@ export {
   createUuidV4,
   toJson,
   toMap,
+  toArray,
+  toString,
 } from './utils';
 
 export {
