@@ -23,7 +23,9 @@
     "paths": {
       "@shared/modules": ["src/app/shared/index.ts"],
       "@shared/components": ["src/app/shared/components/index.ts"]
-    }
+    },
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

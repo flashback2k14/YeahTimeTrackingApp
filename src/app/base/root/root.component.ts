@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { rootComponentModules } from '@shared/modules';
+
+import { MatIconRegistry } from '@angular/material/icon';
+
 import { AuthService } from 'src/app/core/auth.service';
+import { rootComponentModules } from '@shared/modules';
 
 type Link = {
   href: string;
@@ -18,8 +20,7 @@ type Link = {
   styleUrls: ['./root.component.scss'],
 })
 export class RootComponent {
-  title = 'Yeah! Time tracking';
-
+  title: string;
   links: Link[];
 
   constructor(
@@ -28,6 +29,7 @@ export class RootComponent {
     private _iconRegistry: MatIconRegistry,
     private _sanitizer: DomSanitizer
   ) {
+    this.title = 'Yeah! Time tracking';
     this.links = [
       { href: 'dashboard', title: 'Dashboard' },
       { href: 'history', title: 'History' },
@@ -97,12 +99,10 @@ export class RootComponent {
         '../assets/svg/timer-stop-outline.svg'
       )
     );
-    
+
     this._iconRegistry.addSvgIcon(
       'reload',
-      this._sanitizer.bypassSecurityTrustResourceUrl(
-        '../assets/svg/reload.svg'
-      )
+      this._sanitizer.bypassSecurityTrustResourceUrl('../assets/svg/reload.svg')
     );
   }
 }

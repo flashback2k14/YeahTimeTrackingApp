@@ -1,5 +1,3 @@
-import { InjectionToken } from '@angular/core';
-
 export {
   ActionCardModificationData,
   ActionCardModificationType,
@@ -9,15 +7,6 @@ export {
   TimeTrackingAction,
   TimeTrackingActionExtended,
 } from './models';
-
-export {
-  createNewTimeTrackingAction,
-  createUuidV4,
-  toJson,
-  toMap,
-  toArray,
-  toString,
-} from './utils';
 
 export {
   actionCardModificationComponentModules,
@@ -32,6 +21,13 @@ export {
   settingComponentModules,
 } from './modules';
 
-export const API_BASE_URL: InjectionToken<string> = new InjectionToken<string>(
-  'API_BASE_URL'
-);
+export { API_BASE_URL, APP_VERSION } from './tokens';
+
+export {
+  createNewTimeTrackingAction,
+  createUuidV4,
+  toJson,
+  toMap,
+  toArray,
+  toString,
+} from './utils';

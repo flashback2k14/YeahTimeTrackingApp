@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -11,6 +11,7 @@ import { ExportDialogComponent } from '../settings/components/export-dialog/expo
 import {
   ActionCardModificationData,
   ActionCardModificationType,
+  APP_VERSION,
   createNewTimeTrackingAction,
   settingComponentModules,
   StorageKeys,
@@ -33,11 +34,17 @@ export class SettingsComponent {
   apiToken: string;
   actionGroups: string[];
   actions: Map<string, TimeTrackingAction>;
+  username: string;
 
-  constructor(private _dialog: MatDialog, private _snackbar: MatSnackBar) {
+  constructor(
+    private _dialog: MatDialog,
+    private _snackbar: MatSnackBar,
+    @Inject(APP_VERSION) protected appVersion: string
+  ) {
     this.apiToken = toString(StorageKeys.API_TOKEN);
     this.actionGroups = toArray(StorageKeys.TIME_TRACKING_GROUPS);
     this.actions = toMap(StorageKeys.TIME_TRACKING_ACTIONS);
+    this.username = toString(StorageKeys.USER_NAME);
   }
 
   /**
