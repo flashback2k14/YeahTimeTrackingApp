@@ -1,5 +1,5 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { BrowserModule } from '@angular/platform-browser';
@@ -10,8 +10,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { RootComponent } from './app/base/root/root.component';
 import { environment } from './environments/environment';
+import { API_BASE_URL, APP_VERSION } from './app/shared';
 import { APP_ROUTES } from './app/app.routes';
-import { API_BASE_URL } from './app/shared';
 
 if (environment.production) {
   enableProdMode();
@@ -22,6 +22,10 @@ bootstrapApplication(RootComponent, {
     {
       provide: API_BASE_URL,
       useValue: environment.apiBaseUrl,
+    },
+    {
+      provide: APP_VERSION,
+      useValue: environment.appVersion,
     },
     importProvidersFrom(RouterModule.forRoot(APP_ROUTES)),
     importProvidersFrom(BrowserModule),
