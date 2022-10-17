@@ -8,7 +8,7 @@
     <ng-container matColumnDef="index">
       <th mat-header-cell *matHeaderCellDef>#</th>
       <td mat-cell *matCellDef="let row">{{ row.index }}</td>
-      <td mat-footer-cell *matFooterCellDef colspan="5">
+      <td mat-footer-cell *matFooterCellDef colspan="6">
         <div class="container__footer">
           <button mat-icon-button (click)="handleReload()">
             <mat-icon svgIcon="reload"></mat-icon>
@@ -66,8 +66,8 @@
     <tr mat-footer-row *matFooterRowDef="[displayedColumns[0]]; sticky: true"></tr>
     
     <!-- no data row -->
-    <tr class="mat-row no-row-color" *matNoDataRow>
-      <td class="mat-cell" colspan="8" style="text-align: center">
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="6" style="text-align: center">
         <h3 style="margin: 0.75rem">No history data found.</h3>
       </td>
     </tr>
