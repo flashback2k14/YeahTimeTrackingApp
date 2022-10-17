@@ -29,6 +29,7 @@ export class HistoryComponent implements AfterViewInit {
   displayedColumns: string[] = [
     'index',
     'modified',
+    'type',
     'state',
     'duration',
     'comment',
