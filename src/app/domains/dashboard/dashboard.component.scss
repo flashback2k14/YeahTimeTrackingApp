@@ -37,3 +37,19 @@ ul {
     width: 250px;
   }
 }
+
+@media screen and (max-width: 767px) {
+  ul {
+    ytt-action-dashboard-card {
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 959px) {
+  ul {
+    ytt-action-dashboard-card {
+      width: calc(50% - 6px);
+    }
+  }
+}
