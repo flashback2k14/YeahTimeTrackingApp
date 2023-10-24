@@ -10,17 +10,19 @@
           <mat-icon>menu</mat-icon>
         </button>
         <span (click)="goToHome()">{{ title }}</span>
-        <nav mat-tab-nav-bar [color]="'warn'" [tabPanel]="tabPanel">
-          <a
-            mat-tab-link
-            *ngFor="let link of links"
-            [active]="rla.isActive"
-            [routerLink]="link.href"
-            routerLinkActive="active"
-            #rla="routerLinkActive"
-          >
-            {{ link.title }}
-          </a>
+        <nav mat-tab-nav-bar color="accent" [tabPanel]="tabPanel">
+          <ng-container *ngIf="authService.isLoggedIn()">
+            <a
+              mat-tab-link
+              *ngFor="let link of links"
+              [active]="rla.isActive"
+              [routerLink]="link.href"
+              routerLinkActive="active"
+              #rla="routerLinkActive"
+            >
+              {{ link.title }}
+            </a>
+          </ng-container>
         </nav>
         <span class="spacer"></span>
         <button
