@@ -3,10 +3,19 @@
 
   <mat-form-field appearance="outline">
     <mat-label>API Token</mat-label>
-    <input [(ngModel)]="apiToken" matInput placeholder="Please enter your API Token...">
+    <input
+      [(ngModel)]="apiToken"
+      matInput
+      placeholder="Please enter your API Token..."
+    />
   </mat-form-field>
 
-  <button mat-flat-button color="primary" class="save" (click)="handleSaveApiToken()">
+  <button
+    mat-flat-button
+    color="primary"
+    class="save"
+    (click)="handleSaveApiToken()"
+  >
     <mat-icon svgIcon="save"></mat-icon>
     <span>Save</span>
   </button>
@@ -14,28 +23,34 @@
 
 <fieldset>
   <legend>Define groups for time tracking actions</legend>
-  
+
   <mat-form-field appearance="outline">
     <mat-label>Action groups</mat-label>
-    <mat-chip-list #chipList multiple>
-      <mat-chip
-          *ngFor="let actionGroup of actionGroups"
-          [selected]="actionGroup"
-          [value]="actionGroup"
-          (removed)="removeActionGroup(actionGroup)">
-        {{actionGroup}}
+    <mat-chip-grid #chipList multiple>
+      <mat-chip-row
+        *ngFor="let actionGroup of actionGroups"
+        [value]="actionGroup"
+        (removed)="removeActionGroup(actionGroup)"
+      >
+        {{ actionGroup }}
         <button matChipRemove>
           <mat-icon>cancel</mat-icon>
         </button>
-      </mat-chip>
+      </mat-chip-row>
       <input
         placeholder="Add new action group..."
         [matChipInputFor]="chipList"
-        (matChipInputTokenEnd)="addActionGroupFromInput($event)">
-    </mat-chip-list>
+        (matChipInputTokenEnd)="addActionGroupFromInput($event)"
+      />
+    </mat-chip-grid>
   </mat-form-field>
-  
-  <button mat-flat-button color="primary" class="save" (click)="handleSaveActionGroups()">
+
+  <button
+    mat-flat-button
+    color="primary"
+    class="save"
+    (click)="handleSaveActionGroups()"
+  >
     <mat-icon svgIcon="save"></mat-icon>
     <span>Save</span>
   </button>
@@ -43,20 +58,37 @@
 
 <fieldset>
   <legend>Configure time tracking actions</legend>
-  
+
   <span *ngIf="actions.size <= 0">No actions defined.</span>
-  
+
   <ul *ngIf="actions.size > 0">
-    <ytt-action-settings-card 
-      *ngFor="let action of actions | keyvalue" 
+    <ytt-action-settings-card
+      *ngFor="let action of actions | keyvalue"
       [action]="action.value"
-      (edit)="handleOpenActionCardModification(ActionCardModificationType.UPDATE, $event)"
-      (delete)="handleOpenActionCardModification(ActionCardModificationType.DELETE, $event)">
+      (edit)="
+        handleOpenActionCardModification(
+          ActionCardModificationType.UPDATE,
+          $event
+        )
+      "
+      (delete)="
+        handleOpenActionCardModification(
+          ActionCardModificationType.DELETE,
+          $event
+        )
+      "
+    >
     </ytt-action-settings-card>
   </ul>
-  
-  <button mat-flat-button color="primary" class="save" 
-    (click)="handleOpenActionCardModification(ActionCardModificationType.CREATE)">
+
+  <button
+    mat-flat-button
+    color="primary"
+    class="save"
+    (click)="
+      handleOpenActionCardModification(ActionCardModificationType.CREATE)
+    "
+  >
     <mat-icon>add</mat-icon>
     <span>Add</span>
   </button>
@@ -78,7 +110,7 @@
 
 <fieldset>
   <legend>Information</legend>
-  
+
   <p>App version: {{ appVersion }}</p>
   <p>Username: {{ username }}</p>
 </fieldset>

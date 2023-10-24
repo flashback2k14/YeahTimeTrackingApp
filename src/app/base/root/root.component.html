@@ -2,30 +2,41 @@
   <header>
     <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <button mat-icon-button class="toggle-menu-btn" (click)="sidenav.toggle()">
+        <button
+          mat-icon-button
+          class="toggle-menu-btn"
+          (click)="sidenav.toggle()"
+        >
           <mat-icon>menu</mat-icon>
         </button>
         <span (click)="goToHome()">{{ title }}</span>
-        <nav mat-tab-nav-bar [color]="'warn'">
-          <a
-            mat-tab-link
-            *ngFor="let link of links"
-            [active]="rla.isActive"
-            [routerLink]="link.href"
-            routerLinkActive="active"
-            #rla="routerLinkActive"
-          >
-            {{ link.title }}
-          </a>
+        <nav mat-tab-nav-bar color="accent" [tabPanel]="tabPanel">
+          <ng-container *ngIf="authService.isLoggedIn()">
+            <a
+              mat-tab-link
+              *ngFor="let link of links"
+              [active]="rla.isActive"
+              [routerLink]="link.href"
+              routerLinkActive="active"
+              #rla="routerLinkActive"
+            >
+              {{ link.title }}
+            </a>
+          </ng-container>
         </nav>
         <span class="spacer"></span>
-        <button mat-icon-button title="Logout" *ngIf="authService.isLoggedIn()" (click)="authService.logout()">
+        <button
+          mat-icon-button
+          title="Logout"
+          *ngIf="authService.isLoggedIn()"
+          (click)="authService.logout()"
+        >
           <mat-icon>logout</mat-icon>
         </button>
       </mat-toolbar-row>
     </mat-toolbar>
   </header>
-  
+
   <mat-sidenav-container>
     <mat-sidenav #sidenav>
       <mat-nav-list>
@@ -39,9 +50,9 @@
         </a>
       </mat-nav-list>
     </mat-sidenav>
-    
+
     <mat-sidenav-content>
-      <main>
+      <main #tabPanel>
         <router-outlet></router-outlet>
       </main>
     </mat-sidenav-content>
