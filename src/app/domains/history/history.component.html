@@ -1,11 +1,11 @@
-<ytt-loading *ngIf="isLoading">
+<ytt-loading *ngIf="isLoading()">
   <h3>loading history...</h3>
 </ytt-loading>
 
-<div [ngClass]="{ container: true, 'container--hidden': isLoading }">
+<div [ngClass]="{ container: true, 'container--hidden': isLoading() }">
   <table
     mat-table
-    [dataSource]="pagedData"
+    [dataSource]="pagedData()"
     matSort
     matSortActive="modified"
     matSortDisableClear
@@ -75,11 +75,11 @@
     </ng-container>
 
     <!-- data rows -->
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
     <tr
       mat-footer-row
-      *matFooterRowDef="[displayedColumns[0]]; sticky: true"
+      *matFooterRowDef="[displayedColumns()[0]]; sticky: true"
     ></tr>
 
     <!-- no data row -->

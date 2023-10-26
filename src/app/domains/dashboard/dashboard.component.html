@@ -1,23 +1,24 @@
-<ytt-loading *ngIf="isLoading">
+<ytt-loading *ngIf="isLoading()">
   <h3>loading time tracking actions...</h3>
 </ytt-loading>
 
-<div *ngIf="!isLoading && actions.size <= 0" class="no-data-container">
-  <mat-icon svgIcon="no-data" style="scale: 2;"></mat-icon>
+<div *ngIf="!isLoading() && actions.size <= 0" class="no-data-container">
+  <mat-icon svgIcon="no-data" style="scale: 2"></mat-icon>
   <h3>No actions defined.</h3>
 </div>
 
-<div *ngIf="!isLoading && actions.size > 0">
-  <ng-container *ngFor="let x of actions | yttGroupBy:'group' | keyvalue">
+<div *ngIf="!isLoading() && actions.size > 0">
+  <ng-container *ngFor="let x of actions | yttGroupBy : 'group' | keyvalue">
     <h2>
       {{ x.key }}
     </h2>
-  
+
     <ul>
-      <ytt-action-dashboard-card 
-        *ngFor="let y of x.value" 
+      <ytt-action-dashboard-card
+        *ngFor="let y of x.value"
         [action]="y"
-        [isStarted]="y.isStarted">
+        [isStarted]="y.isStarted"
+      >
       </ytt-action-dashboard-card>
     </ul>
   </ng-container>

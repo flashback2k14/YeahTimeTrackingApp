@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 
 import { ActionDashboardCardComponent } from './components/action-dashboard-card/action-dashboard-card.component';
 import { AUTH_TYPE, HttpService } from 'src/app/core/http.service';
@@ -26,20 +26,21 @@ import {
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
-  isLoading: boolean;
-  actions: Map<string, TimeTrackingActionExtended>;
+  private readonly httpservice = inject(HttpService);
 
-  constructor(private _httpservice: HttpService) {
-    this.isLoading = true;
+  protected isLoading = signal(true);
+  protected actions: Map<string, TimeTrackingActionExtended>;
+
+  constructor() {
     this.actions = new Map<string, TimeTrackingActionExtended>();
 
     const settingActions = toMap(StorageKeys.TIME_TRACKING_ACTIONS);
     if (settingActions.size <= 0) {
-      this.isLoading = false;
+      this.isLoading.set(false);
       return;
     }
 
-    this._httpservice
+    this.httpservice
       .get<ActiveTasksResponse>('/active-tasks', AUTH_TYPE.API_TOKEN)
       .subscribe({
         next: (response: ActiveTasksResponse) => {
@@ -54,8 +55,8 @@ export class DashboardComponent {
           }
         },
         error: (error: HttpErrorResponse) =>
-          this._httpservice.showErrorResponse(error),
-        complete: () => (this.isLoading = false),
+          this.httpservice.showErrorResponse(error),
+        complete: () => this.isLoading.set(false),
       });
   }
 }

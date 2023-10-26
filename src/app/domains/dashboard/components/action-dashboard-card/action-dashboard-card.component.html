@@ -2,13 +2,15 @@
   <mat-card-content>
     <h3>Action: {{ action.name }}</h3>
   </mat-card-content>
-  
+
   <mat-card-actions>
-    <button mat-icon-button 
-      color="{{ isStarted ? 'warn' : '' }}" 
-      title="{{ isStarted ? 'Stop action' : 'Start action' }}"
-      (click)="handleClick()">
-      <mat-icon svgIcon="{{ isStarted ? 'stop' : 'play' }}"></mat-icon>
+    <button
+      mat-icon-button
+      color="{{ started() ? 'warn' : '' }}"
+      title="{{ started() ? 'Stop action' : 'Start action' }}"
+      (click)="handleClick()"
+    >
+      <mat-icon svgIcon="{{ started() ? 'stop' : 'play' }}"></mat-icon>
     </button>
   </mat-card-actions>
 </mat-card>

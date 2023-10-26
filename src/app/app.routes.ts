@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './core/auth.guard';
+import { canActivateAuthGuard } from './core/auth.guard';
 
 export const APP_ROUTES: Routes = [
   {
     path: 'dashboard',
-    canActivate: [AuthGuard],
+    canActivate: [canActivateAuthGuard],
     loadComponent: () =>
       import('./domains/dashboard/dashboard.component').then(
         (c) => c.DashboardComponent
@@ -12,7 +12,7 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'history',
-    canActivate: [AuthGuard],
+    canActivate: [canActivateAuthGuard],
     loadComponent: () =>
       import('./domains/history/history.component').then(
         (c) => c.HistoryComponent
@@ -20,7 +20,7 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'settings',
-    canActivate: [AuthGuard],
+    canActivate: [canActivateAuthGuard],
     loadComponent: () =>
       import('./domains/settings/settings.component').then(
         (c) => c.SettingsComponent

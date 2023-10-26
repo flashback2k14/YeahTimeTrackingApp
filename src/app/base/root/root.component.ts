@@ -25,6 +25,7 @@ export class RootComponent {
   private readonly sanitizer = inject(DomSanitizer);
 
   protected authService = inject(AuthService);
+
   protected title = signal('Yeah! Time tracking');
   protected links = signal<Link[]>([
     { href: 'dashboard', title: 'Dashboard' },

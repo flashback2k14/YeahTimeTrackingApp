@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  OnInit,
+  ViewChild,
+  inject,
+  signal,
+} from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -10,6 +19,15 @@ import { HttpService } from 'src/app/core/http.service';
 
 import { historyComponentModules } from '@shared/modules';
 import { LoadingComponent } from '@shared/components';
+import {
+  Subject,
+  catchError,
+  startWith,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 // https://material.angular.io/components/table/examples
 // https://www.youtube.com/watch?v=2oTyoD3qCog
@@ -17,35 +35,67 @@ import { LoadingComponent } from '@shared/components';
 
 @Component({
   selector: 'ytt-history',
-  standalone: true,
-  imports: [...historyComponentModules, RelativeTimePipe, LoadingComponent],
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.scss'],
+  standalone: true,
+  imports: [...historyComponentModules, RelativeTimePipe, LoadingComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HistoryComponent implements AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+export class HistoryComponent implements AfterViewInit, OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly httpService = inject(HttpService);
 
-  displayedColumns: string[] = [
+  private readonly triggerLoad$ = new Subject<void>();
+
+  protected displayedColumns = signal([
     'index',
     'modified',
     'type',
     'state',
     'duration',
     'comment',
-  ];
-  data: HistoryItem[] = [];
-  pagedData: HistoryItem[] = [];
+  ]);
+  protected data = signal([] as HistoryItem[]);
+  protected pagedData = signal([] as HistoryItem[]);
+  protected isLoading = signal(false);
 
   // MatPaginator Inputs
-  pageSize = 25;
-  resultsLength = 0;
-  pageSizeOptions: number[] = [5, 10, 25, 100];
+  protected pageSize = 25;
+  protected resultsLength = 0;
+  protected pageSizeOptions: number[] = [5, 10, 25, 100];
 
-  isLoading: boolean = false;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private _httpService: HttpService) {
-    this._load();
+  ngOnInit(): void {
+    this.triggerLoad$
+      .pipe(
+        startWith(''),
+        tap(() => this.isLoading.set(true)),
+        switchMap(() =>
+          this.httpService.get<HistoryResponse>('/history').pipe(
+            catchError((error) => throwError(() => error)),
+            takeUntilDestroyed(this.destroyRef)
+          )
+        ),
+        tap(() => this.isLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (data: HistoryResponse) => {
+          this.resultsLength = data.historyTasks.length;
+
+          this.data.set(
+            data.historyTasks.map((task: HistoryTask, index: number) =>
+              HistoryItem.create(task, index)
+            )
+          );
+
+          this._resetPaging();
+        },
+        error: (error: HttpErrorResponse) =>
+          this.httpService.showErrorResponse(error),
+      });
   }
 
   ngAfterViewInit(): void {
@@ -55,35 +105,17 @@ export class HistoryComponent implements AfterViewInit {
   }
 
   handleReload(): void {
-    this._load();
+    this.triggerLoad$.next();
   }
 
   handlePaging(event: PageEvent): void {
     const start = event.pageIndex * event.pageSize;
     const end = start + event.pageSize;
-    this.pagedData = this.data.slice(start, end);
-  }
-
-  private _load(): void {
-    this.isLoading = true;
-    this._httpService.get<HistoryResponse>('/history').subscribe({
-      next: (data: HistoryResponse) => {
-        this.resultsLength = data.historyTasks.length;
-
-        this.data = data.historyTasks.map((task: HistoryTask, index: number) =>
-          HistoryItem.create(task, index)
-        );
-
-        this._resetPaging();
-      },
-      error: (error: HttpErrorResponse) =>
-        this._httpService.showErrorResponse(error),
-      complete: () => (this.isLoading = false),
-    });
+    this.pagedData.set(this.data().slice(start, end));
   }
 
   private _resetPaging(): void {
     this.paginator.pageIndex = 0;
-    this.pagedData = this.data.slice(0, this.paginator.pageSize);
+    this.pagedData.set(this.data().slice(0, this.paginator.pageSize));
   }
 }
