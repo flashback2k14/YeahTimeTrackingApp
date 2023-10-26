@@ -1,5 +1,14 @@
-import { Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  Input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -8,41 +17,54 @@ import {
   actionDashboardCardComponentModules,
   TimeTrackingAction,
 } from '@shared/modules';
+import { catchError, of, Subject, switchMap, tap, throwError } from 'rxjs';
 
 @Component({
   selector: 'ytt-action-dashboard-card',
-  standalone: true,
-  imports: actionDashboardCardComponentModules,
   templateUrl: './action-dashboard-card.component.html',
   styleUrls: ['./action-dashboard-card.component.scss'],
+  standalone: true,
+  imports: actionDashboardCardComponentModules,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ActionDashboardCardComponent {
-  @Input() action: TimeTrackingAction;
-  @Input() isStarted: boolean;
+export class ActionDashboardCardComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly httpservice = inject(HttpService);
+  private readonly snackbar = inject(MatSnackBar);
 
-  constructor(
-    private _httpservice: HttpService,
-    private _snackbar: MatSnackBar
-  ) {
-    this.action = {} as TimeTrackingAction;
-    this.isStarted = false;
+  private readonly triggerClick$ = new Subject<void>();
+
+  protected started = signal(false);
+
+  @Input() action = {} as TimeTrackingAction;
+  @Input() set isStarted(value: boolean | null | undefined) {
+    this.started.set(value ?? false);
+  }
+
+  ngOnInit(): void {
+    this.triggerClick$
+      .pipe(
+        tap(() =>
+          this.snackbar.open(
+            `${this.started() ? 'Stop action:' : 'Start action:'} ${
+              this.action.name
+            }`,
+            'Ok',
+            { duration: 1500 }
+          )
+        ),
+        switchMap(() =>
+          this.httpservice.create('/add', { type: this.action.type }).pipe(
+            catchError((error) => throwError(() => error)),
+            takeUntilDestroyed(this.destroyRef)
+          )
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => this.started.update((state) => !state));
   }
 
   handleClick(): void {
-    this._snackbar.open(
-      `${this.isStarted ? 'Stop action:' : 'Start action:'} ${
-        this.action.name
-      }`,
-      'Ok',
-      { duration: 1500 }
-    );
-
-    this._httpservice.create('/add', { type: this.action.type }).subscribe({
-      next: () => {
-        this.isStarted = !this.isStarted;
-      },
-      error: (error: HttpErrorResponse) =>
-        this._httpservice.showErrorResponse(error),
-    });
+    this.triggerClick$.next();
   }
 }

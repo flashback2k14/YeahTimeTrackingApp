@@ -1,32 +1,57 @@
 <ng-container>
-  <h1 mat-dialog-title *ngIf="data.type === ActionCardModificationType.CREATE">Create time tracking action</h1>
-  <h1 mat-dialog-title *ngIf="data.type === ActionCardModificationType.UPDATE">Update {{ data.action.id }} time tracking action</h1>
-  <h1 mat-dialog-title *ngIf="data.type === ActionCardModificationType.DELETE">Delete time tracking action</h1>
-  
-  <div mat-dialog-content *ngIf="data.type === ActionCardModificationType.CREATE || data.type === ActionCardModificationType.UPDATE">
+  <h1 mat-dialog-title *ngIf="data.type === ActionCardModificationType.CREATE">
+    Create time tracking action
+  </h1>
+  <h1 mat-dialog-title *ngIf="data.type === ActionCardModificationType.UPDATE">
+    Update {{ data.action.id }} time tracking action
+  </h1>
+  <h1 mat-dialog-title *ngIf="data.type === ActionCardModificationType.DELETE">
+    Delete time tracking action
+  </h1>
+
+  <div
+    mat-dialog-content
+    *ngIf="
+      data.type === ActionCardModificationType.CREATE ||
+      data.type === ActionCardModificationType.UPDATE
+    "
+  >
     <mat-form-field appearance="outline">
       <mat-label>Name</mat-label>
-      <input [(ngModel)]="data.action.name" matInput placeholder="Please enter an action name...">
+      <input
+        [(ngModel)]="data.action.name"
+        matInput
+        placeholder="Please enter an action name..."
+      />
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Type</mat-label>
-      <input [(ngModel)]="data.action.type" matInput placeholder="Please enter an action type...">
+      <input
+        [(ngModel)]="data.action.type"
+        matInput
+        placeholder="Please enter an action type..."
+      />
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Select an action group</mat-label>
       <mat-select [(value)]="data.action.group">
         <mat-option>None</mat-option>
-        <mat-option *ngFor="let actionGroup of actionGroups" 
-          [value]="actionGroup">{{ actionGroup }}
+        <mat-option
+          *ngFor="let actionGroup of actionGroups()"
+          [value]="actionGroup"
+          >{{ actionGroup }}
         </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
-  
-  <div mat-dialog-content *ngIf="data.type === ActionCardModificationType.DELETE">
-    <p>Are you sure to delete your action with id {{ data.action.id }}?  
+
+  <div
+    mat-dialog-content
+    *ngIf="data.type === ActionCardModificationType.DELETE"
+  >
+    <p>Are you sure to delete your action with id {{ data.action.id }}?</p>
   </div>
-  
+
   <div mat-dialog-actions align="end">
     <button mat-button (click)="handleCancel()">Cancel</button>
     <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>

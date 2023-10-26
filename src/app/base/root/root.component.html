@@ -9,12 +9,12 @@
         >
           <mat-icon>menu</mat-icon>
         </button>
-        <span (click)="goToHome()">{{ title }}</span>
+        <span (click)="goToHome()">{{ title() }}</span>
         <nav mat-tab-nav-bar color="accent" [tabPanel]="tabPanel">
           <ng-container *ngIf="authService.isLoggedIn()">
             <a
               mat-tab-link
-              *ngFor="let link of links"
+              *ngFor="let link of links()"
               [active]="rla.isActive"
               [routerLink]="link.href"
               routerLinkActive="active"
@@ -42,7 +42,7 @@
       <mat-nav-list>
         <a
           mat-list-item
-          *ngFor="let link of links"
+          *ngFor="let link of links()"
           [routerLink]="link.href"
           (click)="sidenav.toggle()"
         >

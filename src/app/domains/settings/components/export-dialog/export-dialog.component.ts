@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { MatDialogRef } from '@angular/material/dialog';
 
@@ -11,16 +11,26 @@ import {
 
 @Component({
   selector: 'ytt-export-dialog',
+  template: `<ng-container>
+    <h1 mat-dialog-title>Setting exporter</h1>
+    <div mat-dialog-content>
+      <p>Are you sure to export your settings?</p>
+    </div>
+
+    <div mat-dialog-actions align="end">
+      <button mat-button (click)="handleCancel()">Cancel</button>
+      <button mat-button cdkFocusInitial (click)="handleOk()">Ok</button>
+    </div>
+  </ng-container>`,
   standalone: true,
   imports: exportDialogComponentModules,
-  templateUrl: './export-dialog.component.html',
-  styleUrls: ['./export-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExportDialogComponent {
-  constructor(private _dialogRef: MatDialogRef<ExportDialogComponent>) {}
+  private readonly dialogRef = inject(MatDialogRef<ExportDialogComponent>);
 
   handleCancel(): void {
-    this._dialogRef.close();
+    this.dialogRef.close();
   }
 
   handleOk(): void {
@@ -32,7 +42,7 @@ export class ExportDialogComponent {
 
     this._createExportFile(content);
 
-    this._dialogRef.close();
+    this.dialogRef.close();
   }
 
   private _createExportFile(content: ExportFile): void {

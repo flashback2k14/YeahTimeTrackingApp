@@ -1,5 +1,5 @@
 <div class="container">
-  <mat-card>
+  <mat-card appearance="outlined">
     <mat-card-header>
       <mat-card-title>
         <h1>Login</h1>
@@ -19,17 +19,17 @@
           #password
           matInput
           placeholder="Please enter your password..."
-          [type]="hidePassword ? 'password' : 'text'"
+          [type]="hidePassword() ? 'password' : 'text'"
         />
         <button
           mat-icon-button
           matSuffix
-          (click)="hidePassword = !hidePassword"
+          (click)="toggle()"
           [attr.aria-label]="'Hide password'"
           [attr.aria-pressed]="hidePassword"
         >
           <mat-icon>{{
-            hidePassword ? "visibility_off" : "visibility"
+            hidePassword() ? "visibility_off" : "visibility"
           }}</mat-icon>
         </button>
       </mat-form-field>

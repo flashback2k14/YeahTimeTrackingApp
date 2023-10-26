@@ -1,23 +1,31 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 
 import { AuthService } from 'src/app/core/auth.service';
 import { authComponentModules } from '@shared/modules';
 
 @Component({
   selector: 'ytt-auth',
-  standalone: true,
-  imports: authComponentModules,
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
+  standalone: true,
+  imports: authComponentModules,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthComponent {
-  hidePassword: boolean;
+  private readonly authService = inject(AuthService);
 
-  constructor(private _authService: AuthService) {
-    this.hidePassword = true;
+  protected hidePassword = signal(true);
+
+  toggle(): void {
+    this.hidePassword.update((value) => !value);
   }
 
   handleLogin(username: string, password: string): void {
-    this._authService.login(username, password);
+    this.authService.login(username, password);
   }
 }

@@ -1,4 +1,10 @@
-import { Component, Inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  inject,
+  signal,
+} from '@angular/core';
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -12,23 +18,22 @@ import {
 
 @Component({
   selector: 'ytt-action-card-modification',
+  templateUrl: './action-card-modification.component.html',
   standalone: true,
   imports: actionCardModificationComponentModules,
-  templateUrl: './action-card-modification.component.html',
-  styleUrls: ['./action-card-modification.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActionCardModificationComponent {
-  ActionCardModificationType = ActionCardModificationType;
-  actionGroups: string[];
+  private readonly dialogRef = inject(
+    MatDialogRef<ActionCardModificationComponent>
+  );
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) protected data: ActionCardModificationData,
-    private _dialogRef: MatDialogRef<ActionCardModificationComponent>
-  ) {
-    this.actionGroups = toArray(StorageKeys.TIME_TRACKING_GROUPS);
-  }
+  protected data = inject(MAT_DIALOG_DATA) as ActionCardModificationData;
+
+  protected actionGroups = signal(toArray(StorageKeys.TIME_TRACKING_GROUPS));
+  protected ActionCardModificationType = ActionCardModificationType;
 
   handleCancel(): void {
-    this._dialogRef.close();
+    this.dialogRef.close();
   }
 }
