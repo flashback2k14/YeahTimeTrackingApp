@@ -5,6 +5,7 @@ import {
   DestroyRef,
   OnInit,
   ViewChild,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -46,6 +47,11 @@ export class HistoryComponent implements AfterViewInit, OnInit {
   private readonly httpService = inject(HttpService);
 
   private readonly triggerLoad$ = new Subject<void>();
+  private readonly triggerPaging$ = new Subject<PageEvent>();
+
+  private data = signal([] as HistoryItem[]);
+  private pageStart = signal(0);
+  private pageEnd = signal(0);
 
   protected displayedColumns = signal([
     'index',
@@ -55,14 +61,18 @@ export class HistoryComponent implements AfterViewInit, OnInit {
     'duration',
     'comment',
   ]);
-  protected data = signal([] as HistoryItem[]);
-  protected pagedData = signal([] as HistoryItem[]);
   protected isLoading = signal(false);
 
   // MatPaginator Inputs
   protected pageSize = 25;
   protected resultsLength = signal(0);
   protected pageSizeOptions: number[] = [5, 10, 25, 100];
+
+  protected pagedData = computed(() => {
+    const start = this.pageStart();
+    const end = this.pageEnd();
+    return this.data().slice(start, end);
+  });
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -88,16 +98,32 @@ export class HistoryComponent implements AfterViewInit, OnInit {
             )
           )
         ),
+        tap(() => this._resetPaging()),
         tap(() => this.isLoading.set(false)),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe(() => this._resetPaging());
+      .subscribe();
+
+    this.triggerPaging$
+      .pipe(
+        tap((event: PageEvent) => {
+          const start = event.pageIndex * event.pageSize;
+          const end = start + event.pageSize;
+
+          this.pageStart.set(start);
+          this.pageEnd.set(end);
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe();
   }
 
   ngAfterViewInit(): void {
-    this.sort.sortChange.subscribe(() => {
-      this._resetPaging();
-    });
+    this.sort.sortChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this._resetPaging();
+      });
   }
 
   handleReload(): void {
@@ -105,13 +131,13 @@ export class HistoryComponent implements AfterViewInit, OnInit {
   }
 
   handlePaging(event: PageEvent): void {
-    const start = event.pageIndex * event.pageSize;
-    const end = start + event.pageSize;
-    this.pagedData.set(this.data().slice(start, end));
+    this.triggerPaging$.next(event);
   }
 
   private _resetPaging(): void {
     this.paginator.pageIndex = 0;
-    this.pagedData.set(this.data().slice(0, this.paginator.pageSize));
+
+    this.pageStart.set(0);
+    this.pageEnd.set(this.paginator.pageSize);
   }
 }
