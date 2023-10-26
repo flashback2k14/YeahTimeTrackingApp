@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 
 import { ActionDashboardCardComponent } from './components/action-dashboard-card/action-dashboard-card.component';
 import { AUTH_TYPE, HttpService } from 'src/app/core/http.service';
@@ -12,6 +12,8 @@ import {
   TimeTrackingActionExtended,
   toMap,
 } from '@shared/modules';
+import { tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'ytt-dashboard',
@@ -26,6 +28,7 @@ import {
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly httpservice = inject(HttpService);
 
   protected isLoading = signal(true);
@@ -42,21 +45,20 @@ export class DashboardComponent {
 
     this.httpservice
       .get<ActiveTasksResponse>('/active-tasks', AUTH_TYPE.API_TOKEN)
-      .subscribe({
-        next: (response: ActiveTasksResponse) => {
-          for (const settingAction of settingActions.values()) {
-            this.actions.set(settingAction.id, {
-              ...settingAction,
-              isStarted:
-                response.active_tasks.findIndex(
-                  (activeTask: string) => settingAction.type === activeTask
-                ) != -1,
-            });
-          }
-        },
-        error: (error: HttpErrorResponse) =>
-          this.httpservice.showErrorResponse(error),
-        complete: () => this.isLoading.set(false),
+      .pipe(
+        tap(() => this.isLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((response: ActiveTasksResponse) => {
+        for (const settingAction of settingActions.values()) {
+          this.actions.set(settingAction.id, {
+            ...settingAction,
+            isStarted:
+              response.active_tasks.findIndex(
+                (activeTask: string) => settingAction.type === activeTask
+              ) != -1,
+          });
+        }
       });
   }
 }

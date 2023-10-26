@@ -61,11 +61,7 @@ export class ActionDashboardCardComponent implements OnInit {
         ),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe({
-        next: () => this.started.update((state) => !state),
-        error: (error: HttpErrorResponse) =>
-          this.httpservice.showErrorResponse(error),
-      });
+      .subscribe(() => this.started.update((state) => !state));
   }
 
   handleClick(): void {

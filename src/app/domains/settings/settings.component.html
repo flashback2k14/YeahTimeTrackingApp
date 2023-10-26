@@ -4,7 +4,8 @@
   <mat-form-field appearance="outline">
     <mat-label>API Token</mat-label>
     <input
-      [(ngModel)]="apiToken"
+      [ngModel]="apiToken()"
+      (ngModelChange)="apiToken.set($event)"
       matInput
       placeholder="Please enter your API Token..."
     />
@@ -28,7 +29,7 @@
     <mat-label>Action groups</mat-label>
     <mat-chip-grid #chipList multiple>
       <mat-chip-row
-        *ngFor="let actionGroup of actionGroups"
+        *ngFor="let actionGroup of actionGroups()"
         [value]="actionGroup"
         (removed)="removeActionGroup(actionGroup)"
       >
@@ -59,11 +60,11 @@
 <fieldset>
   <legend>Configure time tracking actions</legend>
 
-  <span *ngIf="actions.size <= 0">No actions defined.</span>
+  <span *ngIf="actions().size <= 0">No actions defined.</span>
 
-  <ul *ngIf="actions.size > 0">
+  <ul *ngIf="actions().size > 0">
     <ytt-action-settings-card
-      *ngFor="let action of actions | keyvalue"
+      *ngFor="let action of actions() | keyvalue"
       [action]="action.value"
       (edit)="
         handleOpenActionCardModification(
@@ -112,5 +113,5 @@
   <legend>Information</legend>
 
   <p>App version: {{ appVersion }}</p>
-  <p>Username: {{ username }}</p>
+  <p>Username: {{ username() }}</p>
 </fieldset>

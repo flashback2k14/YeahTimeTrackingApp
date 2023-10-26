@@ -1,4 +1,9 @@
-import { Component, Inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -24,36 +29,32 @@ import {
 
 @Component({
   selector: 'ytt-settings',
-  standalone: true,
-  imports: [...settingComponentModules, ActionSettingsCardComponent],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
+  standalone: true,
+  imports: [...settingComponentModules, ActionSettingsCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent {
-  ActionCardModificationType = ActionCardModificationType;
-  apiToken: string;
-  actionGroups: string[];
-  actions: Map<string, TimeTrackingAction>;
-  username: string;
+  private readonly dialog = inject(MatDialog);
+  private readonly snackbar = inject(MatSnackBar);
 
-  constructor(
-    private _dialog: MatDialog,
-    private _snackbar: MatSnackBar,
-    @Inject(APP_VERSION) protected appVersion: string
-  ) {
-    this.apiToken = toString(StorageKeys.API_TOKEN);
-    this.actionGroups = toArray(StorageKeys.TIME_TRACKING_GROUPS);
-    this.actions = toMap(StorageKeys.TIME_TRACKING_ACTIONS);
-    this.username = toString(StorageKeys.USER_NAME);
-  }
+  protected readonly appVersion = inject(APP_VERSION);
+
+  protected apiToken = signal(toString(StorageKeys.API_TOKEN));
+  protected actionGroups = signal(toArray(StorageKeys.TIME_TRACKING_GROUPS));
+  protected actions = signal(toMap(StorageKeys.TIME_TRACKING_ACTIONS));
+  protected username = signal(toString(StorageKeys.USER_NAME));
+
+  protected ActionCardModificationType = ActionCardModificationType;
 
   /**
    * API TOKEN
    */
 
   handleSaveApiToken(): void {
-    this._snackbar.open('Saving API token...', '', { duration: 1000 });
-    localStorage.setItem(StorageKeys.API_TOKEN, this.apiToken);
+    this.snackbar.open('Saving API token...', '', { duration: 1000 });
+    localStorage.setItem(StorageKeys.API_TOKEN, this.apiToken());
   }
 
   /**
@@ -62,22 +63,25 @@ export class SettingsComponent {
 
   addActionGroupFromInput(event: MatChipInputEvent) {
     if (event.value) {
-      this.actionGroups.push(event.value);
+      this.actionGroups.update((groups) => {
+        groups.push(event.value);
+        return groups;
+      });
       event.chipInput!.clear();
     }
   }
 
   removeActionGroup(actionGroup: string): void {
-    this.actionGroups = this.actionGroups.filter(
-      (group: string) => group !== actionGroup
+    this.actionGroups.update((groups) =>
+      groups.filter((group: string) => group !== actionGroup)
     );
   }
 
   handleSaveActionGroups(): void {
-    this._snackbar.open('Saving action groups...', '', { duration: 1000 });
+    this.snackbar.open('Saving action groups...', '', { duration: 1000 });
     localStorage.setItem(
       StorageKeys.TIME_TRACKING_GROUPS,
-      JSON.stringify(this.actionGroups)
+      JSON.stringify(this.actionGroups())
     );
   }
 
@@ -89,7 +93,7 @@ export class SettingsComponent {
     type: ActionCardModificationType,
     action: TimeTrackingAction = createNewTimeTrackingAction()
   ): void {
-    this._dialog
+    this.dialog
       .open(ActionCardModificationComponent, {
         width: '400px',
         disableClose: true,
@@ -103,11 +107,17 @@ export class SettingsComponent {
         switch (data.type) {
           case ActionCardModificationType.CREATE:
           case ActionCardModificationType.UPDATE:
-            this.actions.set(data.action.id, data.action);
+            this.actions.update((actions) => {
+              actions.set(data.action.id, data.action);
+              return actions;
+            });
             break;
 
           case ActionCardModificationType.DELETE:
-            this.actions.delete(data.action.id);
+            this.actions.update((actions) => {
+              actions.delete(data.action.id);
+              return actions;
+            });
             break;
 
           default:
@@ -116,7 +126,7 @@ export class SettingsComponent {
 
         localStorage.setItem(
           StorageKeys.TIME_TRACKING_ACTIONS,
-          toJson(this.actions)
+          toJson(this.actions())
         );
       });
   }
@@ -126,21 +136,21 @@ export class SettingsComponent {
    */
 
   handleOpenImport(): void {
-    this._dialog
+    this.dialog
       .open(ImportDialogComponent, {
         width: '400px',
         disableClose: true,
       })
       .afterClosed()
       .subscribe(() => {
-        this.apiToken = toString(StorageKeys.API_TOKEN) ?? '';
-        this.actionGroups = toArray(StorageKeys.TIME_TRACKING_GROUPS);
-        this.actions = toMap(StorageKeys.TIME_TRACKING_ACTIONS);
+        this.apiToken.set(toString(StorageKeys.API_TOKEN) ?? '');
+        this.actionGroups.set(toArray(StorageKeys.TIME_TRACKING_GROUPS));
+        this.actions.set(toMap(StorageKeys.TIME_TRACKING_ACTIONS));
       });
   }
 
   handleOpenExport(): void {
-    this._dialog.open(ExportDialogComponent, {
+    this.dialog.open(ExportDialogComponent, {
       width: '400px',
       disableClose: true,
     });

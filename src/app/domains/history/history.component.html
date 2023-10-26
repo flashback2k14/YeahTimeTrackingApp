@@ -21,7 +21,7 @@
             <mat-icon svgIcon="reload"></mat-icon>
           </button>
           <mat-paginator
-            [length]="resultsLength"
+            [length]="resultsLength()"
             [pageSize]="pageSize"
             [pageSizeOptions]="pageSizeOptions"
             (page)="handlePaging($event)"

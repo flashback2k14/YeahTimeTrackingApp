@@ -8,7 +8,6 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { API_BASE_URL, StorageKeys } from '@shared/modules';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 export enum AUTH_TYPE {
   USER,
@@ -21,7 +20,6 @@ export enum AUTH_TYPE {
 export class HttpService {
   private readonly baseUrl = inject(API_BASE_URL);
   private readonly http = inject(HttpClient);
-  private readonly snackbar = inject(MatSnackBar);
 
   get<T>(
     route: string,
@@ -86,9 +84,5 @@ export class HttpService {
       .append('Authorization', `Basic ${login}`);
 
     return headers;
-  }
-
-  public showErrorResponse(error: HttpErrorResponse): void {
-    this.snackbar.open(error?.error?.message ?? 'Unknown error.', 'Done');
   }
 }

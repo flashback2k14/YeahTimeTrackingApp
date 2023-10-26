@@ -61,7 +61,7 @@ export class HistoryComponent implements AfterViewInit, OnInit {
 
   // MatPaginator Inputs
   protected pageSize = 25;
-  protected resultsLength = 0;
+  protected resultsLength = signal(0);
   protected pageSizeOptions: number[] = [5, 10, 25, 100];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -78,24 +78,20 @@ export class HistoryComponent implements AfterViewInit, OnInit {
             takeUntilDestroyed(this.destroyRef)
           )
         ),
-        tap(() => this.isLoading.set(false)),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe({
-        next: (data: HistoryResponse) => {
-          this.resultsLength = data.historyTasks.length;
-
+        tap((data: HistoryResponse) =>
+          this.resultsLength.set(data.historyTasks.length)
+        ),
+        tap((data: HistoryResponse) =>
           this.data.set(
             data.historyTasks.map((task: HistoryTask, index: number) =>
               HistoryItem.create(task, index)
             )
-          );
-
-          this._resetPaging();
-        },
-        error: (error: HttpErrorResponse) =>
-          this.httpService.showErrorResponse(error),
-      });
+          )
+        ),
+        tap(() => this.isLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => this._resetPaging());
   }
 
   ngAfterViewInit(): void {
