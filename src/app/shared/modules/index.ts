@@ -1,5 +1,12 @@
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import {
+  DatePipe,
+  KeyValuePipe,
+  NgClass,
+  NgFor,
+  NgForOf,
+  NgIf,
+} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,7 +28,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 
 export const rootComponentModules = [
-  CommonModule,
+  NgIf,
+  NgForOf,
   RouterModule,
   MatToolbarModule,
   MatSidenavModule,
@@ -32,7 +40,6 @@ export const rootComponentModules = [
 ];
 
 export const authComponentModules = [
-  CommonModule,
   MatCardModule,
   MatButtonModule,
   MatDividerModule,
@@ -42,7 +49,9 @@ export const authComponentModules = [
 ];
 
 export const settingComponentModules = [
-  CommonModule,
+  NgIf,
+  NgForOf,
+  KeyValuePipe,
   FormsModule,
   MatFormFieldModule,
   MatInputModule,
@@ -53,14 +62,9 @@ export const settingComponentModules = [
   MatChipsModule,
 ];
 
-export const exportDialogComponentModules = [
-  CommonModule,
-  MatDialogModule,
-  MatButtonModule,
-];
+export const exportDialogComponentModules = [MatDialogModule, MatButtonModule];
 
 export const importDialogComponentModules = [
-  CommonModule,
   MatDialogModule,
   MatButtonModule,
   MatFormFieldModule,
@@ -68,7 +72,7 @@ export const importDialogComponentModules = [
 ];
 
 export const actionCardModificationComponentModules = [
-  CommonModule,
+  NgIf,
   FormsModule,
   MatDialogModule,
   MatButtonModule,
@@ -78,7 +82,6 @@ export const actionCardModificationComponentModules = [
 ];
 
 export const actionSettingsCardComponentModules = [
-  CommonModule,
   MatCardModule,
   MatButtonModule,
   MatIconModule,
@@ -86,20 +89,23 @@ export const actionSettingsCardComponentModules = [
 ];
 
 export const actionDashboardCardComponentModules = [
-  CommonModule,
   MatCardModule,
   MatButtonModule,
   MatIconModule,
 ];
 
 export const dashboardComponentModules = [
-  CommonModule,
+  NgFor,
+  NgIf,
+  KeyValuePipe,
   MatIconModule,
   MatDividerModule,
 ];
 
 export const historyComponentModules = [
-  CommonModule,
+  NgClass,
+  NgIf,
+  DatePipe,
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,

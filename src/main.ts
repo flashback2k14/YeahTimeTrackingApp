@@ -1,4 +1,4 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -31,16 +31,16 @@ bootstrapApplication(RootComponent, {
       provide: APP_VERSION,
       useValue: environment.appVersion,
     },
+    importProvidersFrom(BrowserModule),
+    importProvidersFrom(MatSnackBarModule),
     provideRouter(APP_ROUTES, withEnabledBlockingInitialNavigation()),
     provideHttpClient(withInterceptors([errorInterceptor])),
+    provideAnimations(),
     provideServiceWorker('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000',
     }),
-    importProvidersFrom(BrowserModule),
-    importProvidersFrom(BrowserAnimationsModule),
-    importProvidersFrom(MatSnackBarModule),
   ],
 });
