@@ -34,6 +34,6 @@ export class ActionCardModificationComponent {
   protected ActionCardModificationType = ActionCardModificationType;
 
   handleCancel(): void {
-    this.dialogRef.close();
+    this.dialogRef.close({ type: ActionCardModificationType.CANCEL });
   }
 }

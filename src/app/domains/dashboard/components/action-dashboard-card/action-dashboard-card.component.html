@@ -1,16 +1,18 @@
-<mat-card appearance="outlined">
-  <mat-card-content>
-    <h3>Action: {{ action.name }}</h3>
-  </mat-card-content>
+<ng-container *transloco="let t; read: 'action'">
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <h3>{{ t("title", { name: action.name }) }}</h3>
+    </mat-card-content>
 
-  <mat-card-actions>
-    <button
-      mat-icon-button
-      color="{{ started() ? 'warn' : '' }}"
-      title="{{ started() ? 'Stop action' : 'Start action' }}"
-      (click)="handleClick()"
-    >
-      <mat-icon svgIcon="{{ started() ? 'stop' : 'play' }}"></mat-icon>
-    </button>
-  </mat-card-actions>
-</mat-card>
+    <mat-card-actions>
+      <button
+        mat-icon-button
+        color="{{ started() ? 'warn' : '' }}"
+        title="{{ started() ? t('stop') : t('start') }}"
+        (click)="handleClick()"
+      >
+        <mat-icon svgIcon="{{ started() ? 'stop' : 'play' }}" />
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</ng-container>

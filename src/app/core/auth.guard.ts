@@ -7,6 +7,7 @@ import {
 } from '@angular/router';
 
 import { AuthService } from './auth.service';
+import { NotificationService } from './notification.service';
 
 export const canActivateAuthGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
@@ -14,12 +15,14 @@ export const canActivateAuthGuard: CanActivateFn = (
 ) => {
   const authService = inject(AuthService);
   const router = inject(Router);
+  const notification = inject(NotificationService);
 
   if (authService.isLoggedIn()) {
     return true;
   }
 
-  console.error('not logged in');
+  notification.showLazy('notification.auth.redirect');
+
   router.navigate(['login'], { queryParams: { returnUrl: state.url } });
   return false;
 };

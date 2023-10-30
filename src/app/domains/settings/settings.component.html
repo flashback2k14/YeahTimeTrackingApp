@@ -1,117 +1,118 @@
-<fieldset>
-  <legend>Authentication</legend>
+<ng-container *transloco="let t; read: 'settings'">
+  <fieldset>
+    <legend>{{ t("auth.title") }}</legend>
 
-  <mat-form-field appearance="outline">
-    <mat-label>API Token</mat-label>
-    <input
-      [ngModel]="apiToken()"
-      (ngModelChange)="apiToken.set($event)"
-      matInput
-      placeholder="Please enter your API Token..."
-    />
-  </mat-form-field>
-
-  <button
-    mat-flat-button
-    color="primary"
-    class="save"
-    (click)="handleSaveApiToken()"
-  >
-    <mat-icon svgIcon="save"></mat-icon>
-    <span>Save</span>
-  </button>
-</fieldset>
-
-<fieldset>
-  <legend>Define groups for time tracking actions</legend>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Action groups</mat-label>
-    <mat-chip-grid #chipList multiple>
-      <mat-chip-row
-        *ngFor="let actionGroup of actionGroups()"
-        [value]="actionGroup"
-        (removed)="removeActionGroup(actionGroup)"
-      >
-        {{ actionGroup }}
-        <button matChipRemove>
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </mat-chip-row>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ t("auth.label") }}</mat-label>
       <input
-        placeholder="Add new action group..."
-        [matChipInputFor]="chipList"
-        (matChipInputTokenEnd)="addActionGroupFromInput($event)"
+        matInput
+        [ngModel]="apiToken()"
+        (ngModelChange)="apiToken.set($event)"
+        [placeholder]="t('auth.placeholder')"
       />
-    </mat-chip-grid>
-  </mat-form-field>
+    </mat-form-field>
 
-  <button
-    mat-flat-button
-    color="primary"
-    class="save"
-    (click)="handleSaveActionGroups()"
-  >
-    <mat-icon svgIcon="save"></mat-icon>
-    <span>Save</span>
-  </button>
-</fieldset>
+    <button
+      mat-flat-button
+      color="primary"
+      class="save"
+      (click)="handleSaveApiToken()"
+    >
+      <mat-icon svgIcon="save" />
+      <span>{{ t("buttons.save") }}</span>
+    </button>
+  </fieldset>
 
-<fieldset>
-  <legend>Configure time tracking actions</legend>
+  <fieldset>
+    <legend>{{ t("groups.title") }}</legend>
 
-  <span *ngIf="actions().size <= 0">No actions defined.</span>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ t("groups.label") }}</mat-label>
+      <mat-chip-grid #chipList multiple>
+        <mat-chip-row
+          *ngFor="let actionGroup of actionGroups()"
+          [value]="actionGroup"
+          (removed)="removeActionGroup(actionGroup)"
+        >
+          {{ actionGroup }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+        <input
+          [placeholder]="t('groups.placeholder')"
+          [matChipInputFor]="chipList"
+          (matChipInputTokenEnd)="addActionGroupFromInput($event)"
+        />
+      </mat-chip-grid>
+    </mat-form-field>
 
-  <ul *ngIf="actions().size > 0">
-    <ytt-action-settings-card
-      *ngFor="let action of actions() | keyvalue"
-      [action]="action.value"
-      (edit)="
-        handleOpenActionCardModification(
-          ActionCardModificationType.UPDATE,
-          $event
-        )
-      "
-      (delete)="
-        handleOpenActionCardModification(
-          ActionCardModificationType.DELETE,
-          $event
-        )
+    <button
+      mat-flat-button
+      color="primary"
+      class="save"
+      (click)="handleSaveActionGroups()"
+    >
+      <mat-icon svgIcon="save" />
+      <span>{{ t("buttons.save") }}</span>
+    </button>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{ t("actions.title") }}</legend>
+
+    <span *ngIf="actionSize() <= 0">{{ t("actions.no-data") }}</span>
+
+    <ul *ngIf="actionSize() > 0">
+      <ytt-action-settings-card
+        *ngFor="let action of actions() | keyvalue"
+        [action]="action.value"
+        (edit)="
+          handleOpenActionCardModification(
+            ActionCardModificationType.UPDATE,
+            $event
+          )
+        "
+        (delete)="
+          handleOpenActionCardModification(
+            ActionCardModificationType.DELETE,
+            $event
+          )
+        "
+      />
+    </ul>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="save"
+      (click)="
+        handleOpenActionCardModification(ActionCardModificationType.CREATE)
       "
     >
-    </ytt-action-settings-card>
-  </ul>
+      <mat-icon>add</mat-icon>
+      <span>{{ t("buttons.add") }}</span>
+    </button>
+  </fieldset>
 
-  <button
-    mat-flat-button
-    color="primary"
-    class="save"
-    (click)="
-      handleOpenActionCardModification(ActionCardModificationType.CREATE)
-    "
-  >
-    <mat-icon>add</mat-icon>
-    <span>Add</span>
-  </button>
-</fieldset>
+  <fieldset>
+    <legend>{{ t("local-settings.title") }}</legend>
 
-<fieldset>
-  <legend>Actions</legend>
+    <button mat-flat-button color="primary" (click)="handleOpenImport()">
+      <mat-icon svgIcon="upload"></mat-icon>
+      <span>{{ t("buttons.import") }}</span>
+    </button>
 
-  <button mat-flat-button color="primary" (click)="handleOpenImport()">
-    <mat-icon svgIcon="upload"></mat-icon>
-    <span>Import</span>
-  </button>
+    <button mat-flat-button color="primary" (click)="handleOpenExport()">
+      <mat-icon svgIcon="download"></mat-icon>
+      <span>{{ t("buttons.export") }}</span>
+    </button>
+  </fieldset>
 
-  <button mat-flat-button color="primary" (click)="handleOpenExport()">
-    <mat-icon svgIcon="download"></mat-icon>
-    <span>Export</span>
-  </button>
-</fieldset>
+  <fieldset>
+    <legend>{{ t("information.title") }}</legend>
 
-<fieldset>
-  <legend>Information</legend>
-
-  <p>App version: {{ appVersion }}</p>
-  <p>Username: {{ username() }}</p>
-</fieldset>
+    <p>{{ t("information.version", { version: appVersion }) }}</p>
+    <p>{{ t("information.username", { username: username() }) }}</p>
+  </fieldset>
+</ng-container>

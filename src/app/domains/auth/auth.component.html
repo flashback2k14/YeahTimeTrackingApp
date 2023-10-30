@@ -1,48 +1,50 @@
-<div class="container">
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <mat-card-title>
-        <h1>Login</h1>
-      </mat-card-title>
-    </mat-card-header>
+<ng-container *transloco="let t; read: 'auth'">
+  <div class="container">
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          <h2>{{ t("title") }}</h2>
+        </mat-card-title>
+      </mat-card-header>
 
-    <mat-divider></mat-divider>
+      <mat-divider></mat-divider>
 
-    <mat-card-content>
-      <mat-form-field appearance="outline">
-        <mat-label>Username</mat-label>
-        <input #username matInput placeholder="Please enter your username..." />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input
-          #password
-          matInput
-          placeholder="Please enter your password..."
-          [type]="hidePassword() ? 'password' : 'text'"
-        />
+      <mat-card-content>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ t("username.label") }}</mat-label>
+          <input #username matInput [placeholder]="t('username.placeholder')" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ t("password.label") }}</mat-label>
+          <input
+            #password
+            matInput
+            [placeholder]="t('password.placeholder')"
+            [type]="hidePassword() ? 'password' : 'text'"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="toggle()"
+            [attr.aria-label]="t('password.button')"
+            [attr.aria-pressed]="hidePassword()"
+          >
+            <mat-icon>{{
+              hidePassword() ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
+        </mat-form-field>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
         <button
-          mat-icon-button
-          matSuffix
-          (click)="toggle()"
-          [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hidePassword"
+          mat-flat-button
+          color="primary"
+          (click)="handleLogin(username?.value ?? '', password?.value ?? '')"
         >
-          <mat-icon>{{
-            hidePassword() ? "visibility_off" : "visibility"
-          }}</mat-icon>
+          {{ t("submit") }}
         </button>
-      </mat-form-field>
-    </mat-card-content>
-
-    <mat-card-actions align="end">
-      <button
-        mat-flat-button
-        color="primary"
-        (click)="handleLogin(username?.value ?? '', password?.value ?? '')"
-      >
-        Login
-      </button>
-    </mat-card-actions>
-  </mat-card>
-</div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</ng-container>

@@ -7,17 +7,15 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { HttpService } from 'src/app/core/http.service';
 import {
   actionDashboardCardComponentModules,
   TimeTrackingAction,
 } from '@shared/modules';
-import { catchError, of, Subject, switchMap, tap, throwError } from 'rxjs';
+import { catchError, Subject, switchMap, tap, throwError } from 'rxjs';
+import { NotificationService } from 'src/app/core/notification.service';
 
 @Component({
   selector: 'ytt-action-dashboard-card',
@@ -30,7 +28,7 @@ import { catchError, of, Subject, switchMap, tap, throwError } from 'rxjs';
 export class ActionDashboardCardComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly httpservice = inject(HttpService);
-  private readonly snackbar = inject(MatSnackBar);
+  private readonly notification = inject(NotificationService);
 
   private readonly triggerClick$ = new Subject<void>();
 
@@ -45,12 +43,14 @@ export class ActionDashboardCardComponent implements OnInit {
     this.triggerClick$
       .pipe(
         tap(() =>
-          this.snackbar.open(
-            `${this.started() ? 'Stop action:' : 'Start action:'} ${
-              this.action.name
-            }`,
-            'Ok',
-            { duration: 1500 }
+          this.notification.show(
+            this.started()
+              ? 'notification.action.stop'
+              : 'notification.action.start',
+            {
+              name: this.action.name,
+            },
+            'settings.buttons.ok'
           )
         ),
         switchMap(() =>
@@ -59,9 +59,10 @@ export class ActionDashboardCardComponent implements OnInit {
             takeUntilDestroyed(this.destroyRef)
           )
         ),
+        tap(() => this.started.update((state) => !state)),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe(() => this.started.update((state) => !state));
+      .subscribe();
   }
 
   handleClick(): void {

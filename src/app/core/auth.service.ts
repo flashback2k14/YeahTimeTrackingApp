@@ -1,24 +1,21 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { AUTH_TYPE, HttpService } from './http.service';
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { MatSnackBar } from '@angular/material/snack-bar';
-
 import { StorageKeys } from './../shared';
+import { NotificationService } from './notification.service';
 
 export interface LoginResult {
   successful: boolean;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class AuthService {
-  private readonly snackbar = inject(MatSnackBar);
   private readonly httpService = inject(HttpService);
-  private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+
+  private readonly notification = inject(NotificationService);
 
   public isLoggedIn(): boolean {
     const valid = localStorage.getItem(StorageKeys.USER_LOGGED_IN) ?? false;
@@ -29,15 +26,14 @@ export class AuthService {
   }
 
   public async login(username: string, password: string): Promise<void> {
-    this.snackbar.open(`Logging in with user ${username}...`, '', {
-      duration: 1500,
-    });
+    this.notification.show('notification.auth.login', { username });
 
     const login = btoa(`${username}:${password}`);
     localStorage.setItem(StorageKeys.USER_LOGIN, login);
 
-    this.httpService.get<LoginResult>('/check-user', AUTH_TYPE.USER).subscribe({
-      next: (value: LoginResult) => {
+    this.httpService
+      .get<LoginResult>('/check-user', AUTH_TYPE.USER)
+      .subscribe((value: LoginResult) => {
         if (value.successful) {
           localStorage.setItem(StorageKeys.USER_LOGGED_IN, 'true');
           localStorage.setItem(StorageKeys.USER_NAME, username);
@@ -48,21 +44,13 @@ export class AuthService {
         } else {
           localStorage.setItem(StorageKeys.USER_LOGGED_IN, 'false');
         }
-      },
-      error: (error: HttpErrorResponse) => {
-        this.snackbar.open(error?.error?.message ?? 'Unknown error.', 'Done');
-      },
-    });
+      });
   }
 
   public logout(): void {
-    this.snackbar.open(
-      `Logging out with user ${localStorage.getItem(StorageKeys.USER_NAME)}...`,
-      '',
-      {
-        duration: 1500,
-      }
-    );
+    this.notification.show('notification.auth.logout', {
+      username: localStorage.getItem(StorageKeys.USER_NAME),
+    });
 
     localStorage.removeItem(StorageKeys.USER_LOGGED_IN);
     localStorage.removeItem(StorageKeys.USER_LOGIN);

@@ -1,8 +1,4 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -14,9 +10,7 @@ export enum AUTH_TYPE {
   API_TOKEN,
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class HttpService {
   private readonly baseUrl = inject(API_BASE_URL);
   private readonly http = inject(HttpClient);

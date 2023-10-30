@@ -1,6 +1,6 @@
 {
   "name": "yeah-time-tracking-app",
-  "version": "1.8.2",
+  "version": "1.9.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^16.2.11",
     "@angular/router": "^16.2.11",
     "@angular/service-worker": "^16.2.11",
+    "@ngneat/transloco": "^6.0.0",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
     "zone.js": "~0.13.3"

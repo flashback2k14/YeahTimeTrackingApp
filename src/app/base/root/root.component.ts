@@ -1,11 +1,13 @@
 import { DomSanitizer } from '@angular/platform-browser';
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MatIconRegistry } from '@angular/material/icon';
 
 import { AuthService } from 'src/app/core/auth.service';
 import { rootComponentModules } from '@shared/modules';
+import { TranslocoService } from '@ngneat/transloco';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type Link = {
   href: string;
@@ -19,21 +21,39 @@ type Link = {
   standalone: true,
   imports: rootComponentModules,
 })
-export class RootComponent {
-  private readonly router = inject(Router);
+export class RootComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly iconRegistry = inject(MatIconRegistry);
+  private readonly router = inject(Router);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly translator = inject(TranslocoService);
 
   protected authService = inject(AuthService);
 
   protected title = signal('Yeah! Time tracking');
-  protected links = signal<Link[]>([
-    { href: 'dashboard', title: 'Dashboard' },
-    { href: 'history', title: 'History' },
-    { href: 'settings', title: 'Settings' },
-  ]);
+  protected links = signal<Link[]>([]);
 
-  constructor() {
+  ngOnInit(): void {
+    this.translator
+      .selectTranslation()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.links.set([
+          {
+            href: 'dashboard',
+            title: value['nav.dashboard'],
+          },
+          {
+            href: 'history',
+            title: value['nav.history'],
+          },
+          {
+            href: 'settings',
+            title: value['nav.settings'],
+          },
+        ]);
+      });
+
     this._initIcons();
   }
 

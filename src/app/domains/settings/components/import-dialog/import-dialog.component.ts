@@ -10,19 +10,21 @@ import {
 
 @Component({
   selector: 'ytt-import-dialog',
-  template: `<ng-container>
-    <h1 mat-dialog-title>Setting importer</h1>
+  template: `<ng-container *transloco="let t">
+    <h1 mat-dialog-title>{{ t('settings.importer.title') }}</h1>
     <div mat-dialog-content>
-      <p>Are you sure to import your settings?</p>
+      <p>{{ t('settings.importer.desc') }}</p>
       <mat-form-field appearance="fill">
-        <mat-label>Settings</mat-label>
+        <mat-label>{{ t('settings.importer.label') }}</mat-label>
         <textarea #importArea matInput rows="5"></textarea>
       </mat-form-field>
     </div>
     <div mat-dialog-actions align="end">
-      <button mat-button (click)="handleCancel()">Cancel</button>
+      <button mat-button (click)="handleCancel()">
+        {{ t('settings.buttons.cancel') }}
+      </button>
       <button mat-button cdkFocusInitial (click)="handleOk(importArea)">
-        Ok
+        {{ t('settings.buttons.ok') }}
       </button>
     </div>
   </ng-container>`,

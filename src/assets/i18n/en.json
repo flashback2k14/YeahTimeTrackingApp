@@ -1,0 +1,135 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "history": "History",
+    "settings": "Settings"
+  },
+  "footer": {
+    "me": "Developed by flashback2k14"
+  },
+  "notification": {
+    "auth": {
+      "login": "Logging in with user {{username}}...",
+      "logout": "Logging out with user {{username}}...",
+      "redirect": "You are not logged in. Redirected."
+    },
+    "action": {
+      "start": "Start action: {{name}}.",
+      "stop": "Stop action: {{name}}."
+    },
+    "save": {
+      "token": "Saving API token...",
+      "groups": "Saving action groups..."
+    },
+    "error": {
+      "default-http": "Unknown error."
+    }
+  },
+  "auth": {
+    "title": "Please enter your login credentials",
+    "username": {
+      "label": "Username",
+      "placeholder": "Please enter your username..."
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Please enter your password...",
+      "button": "Hide password"
+    },
+    "submit": "Login"
+  },
+  "dashboard": {
+    "loading": "Loading time tracking actions...",
+    "no-data": "No actions defined."
+  },
+  "action": {
+    "title": "Action: {{name}}",
+    "start": "Start this action.",
+    "stop": "Stop this action."
+  },
+  "history": {
+    "loading": "Loading history actions...",
+    "no-data": "No history actions found.",
+    "columns": {
+      "reload": "Reload history",
+      "modified": "Modified",
+      "type": "Type",
+      "state": "State",
+      "duration": "Duration",
+      "comment": "Comment"
+    }
+  },
+  "settings": {
+    "buttons": {
+      "save": "Save",
+      "add": "Add",
+      "import": "Import",
+      "export": "Export",
+      "cancel": "Cancel",
+      "ok": "Ok",
+      "done": "Done"
+    },
+    "auth": {
+      "title": "Define authentication with API token",
+      "label": "API token",
+      "placeholder": "Please enter your API token..."
+    },
+    "groups": {
+      "title": "Define time tracking action groups",
+      "label": "Action groups",
+      "placeholder": "Add new action group..."
+    },
+    "actions": {
+      "title": "Define time tracking actions",
+      "no-data": "No actions defined."
+    },
+    "action-card": {
+      "action": "Action: {{name}}",
+      "type": "Type: {{type}}",
+      "group": "Group: {{group}}"
+    },
+    "action-card-modification": {
+      "title": {
+        "create": "Create a new time tracking action",
+        "update": "Update the time tracking action with id: {{id}}",
+        "delete": "Delete the time tracking action"
+      },
+      "name": {
+        "label": "Action name",
+        "placeholder": "Please enter an action name..."
+      },
+      "type": {
+        "label": "Action type",
+        "placeholder": "Please enter an action type..."
+      },
+      "group": {
+        "label": "Select an action group",
+        "default-value": "None"
+      },
+      "delete": {
+        "desc": "Are you sure to delete your action with id: {{id}}?"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "ok": "Ok"
+      }
+    },
+    "local-settings": {
+      "title": "Local settings"
+    },
+    "importer": {
+      "title": "Setting importer",
+      "desc": "Are you sure to import this settings?",
+      "label": "Settings"
+    },
+    "exporter": {
+      "title": "Setting exporter",
+      "desc": "Are you sure to export your settings?"
+    },
+    "information": {
+      "title": "Information",
+      "version": "App version: {{version}}",
+      "username": "Username: {{username}}"
+    }
+  }
+}

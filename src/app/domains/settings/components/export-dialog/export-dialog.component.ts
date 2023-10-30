@@ -11,15 +11,19 @@ import {
 
 @Component({
   selector: 'ytt-export-dialog',
-  template: `<ng-container>
-    <h1 mat-dialog-title>Setting exporter</h1>
+  template: `<ng-container *transloco="let t">
+    <h1 mat-dialog-title>{{ t('settings.exporter.title') }}</h1>
     <div mat-dialog-content>
-      <p>Are you sure to export your settings?</p>
+      <p>{{ t('settings.exporter.desc') }}</p>
     </div>
 
     <div mat-dialog-actions align="end">
-      <button mat-button (click)="handleCancel()">Cancel</button>
-      <button mat-button cdkFocusInitial (click)="handleOk()">Ok</button>
+      <button mat-button (click)="handleCancel()">
+        {{ t('settings.buttons.cancel') }}
+      </button>
+      <button mat-button cdkFocusInitial (click)="handleOk()">
+        {{ t('settings.buttons.ok') }}
+      </button>
     </div>
   </ng-container>`,
   standalone: true,

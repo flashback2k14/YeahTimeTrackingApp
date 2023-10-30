@@ -11,6 +11,7 @@ export enum ActionCardModificationType {
   CREATE,
   UPDATE,
   DELETE,
+  CANCEL,
 }
 
 export interface ActionCardModificationData {

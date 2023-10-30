@@ -1,25 +1,28 @@
-<ytt-loading *ngIf="isLoading()">
-  <h3>loading time tracking actions...</h3>
-</ytt-loading>
+<ng-container *transloco="let t; read: 'dashboard'">
+  <ytt-loading *ngIf="isLoading()">
+    <h3>{{ t("loading") }}</h3>
+  </ytt-loading>
 
-<div *ngIf="!isLoading() && actions.size <= 0" class="no-data-container">
-  <mat-icon svgIcon="no-data" style="scale: 2"></mat-icon>
-  <h3>No actions defined.</h3>
-</div>
+  <div *ngIf="!isLoading() && actions.size <= 0" class="no-data-container">
+    <mat-icon svgIcon="no-data" style="scale: 2" />
+    <h3>{{ t("no-data") }}</h3>
+  </div>
 
-<div *ngIf="!isLoading() && actions.size > 0">
-  <ng-container *ngFor="let x of actions | yttGroupBy : 'group' | keyvalue">
-    <h2>
-      {{ x.key }}
-    </h2>
+  <div *ngIf="!isLoading() && actions.size > 0">
+    <ng-container
+      *ngFor="let entry of actions | yttGroupBy : 'group' | keyvalue"
+    >
+      <h2>
+        {{ entry.key }}
+      </h2>
 
-    <ul>
-      <ytt-action-dashboard-card
-        *ngFor="let y of x.value"
-        [action]="y"
-        [isStarted]="y.isStarted"
-      >
-      </ytt-action-dashboard-card>
-    </ul>
-  </ng-container>
-</div>
+      <ul>
+        <ytt-action-dashboard-card
+          *ngFor="let action of entry.value"
+          [action]="action"
+          [isStarted]="action.isStarted"
+        />
+      </ul>
+    </ng-container>
+  </div>
+</ng-container>

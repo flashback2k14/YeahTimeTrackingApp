@@ -13,24 +13,26 @@ import {
 
 @Component({
   selector: 'ytt-action-settings-card',
-  template: `<mat-card appearance="outlined">
-    <mat-card-content>
-      <h3>Action: {{ action.name }}</h3>
-      <mat-divider></mat-divider>
-      <p>Type: {{ action.type }}</p>
-      <p>Group: {{ action.group }}</p>
-    </mat-card-content>
+  template: `<ng-container *transloco="let t; read: 'settings.action-card'">
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <h3>{{ t('action', { name: action?.name }) }}</h3>
+        <mat-divider></mat-divider>
+        <p>{{ t('type', { type: action?.type }) }}</p>
+        <p>{{ t('group', { group: action?.group }) }}</p>
+      </mat-card-content>
 
-    <mat-card-actions align="end">
-      <button mat-icon-button (click)="handleEdit()">
-        <mat-icon svgIcon="edit"></mat-icon>
-      </button>
+      <mat-card-actions align="end">
+        <button mat-icon-button (click)="handleEdit()">
+          <mat-icon svgIcon="edit" />
+        </button>
 
-      <button mat-icon-button color="warn" (click)="handleDelete()">
-        <mat-icon svgIcon="delete"></mat-icon>
-      </button>
-    </mat-card-actions>
-  </mat-card> `,
+        <button mat-icon-button color="warn" (click)="handleDelete()">
+          <mat-icon svgIcon="delete" />
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>`,
   styles: [
     `
       h3 {
@@ -48,7 +50,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActionSettingsCardComponent {
-  @Input() action = {} as TimeTrackingAction;
+  @Input() action: TimeTrackingAction | undefined;
   @Output() edit = new EventEmitter<TimeTrackingAction>();
   @Output() delete = new EventEmitter<TimeTrackingAction>();
 

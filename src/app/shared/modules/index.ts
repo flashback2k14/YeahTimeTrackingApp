@@ -26,6 +26,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
+import { TranslocoDirective, TranslocoPipe } from '@ngneat/transloco';
 
 export const rootComponentModules = [
   NgIf,
@@ -37,6 +38,7 @@ export const rootComponentModules = [
   MatTabsModule,
   MatIconModule,
   MatButtonModule,
+  TranslocoPipe,
 ];
 
 export const authComponentModules = [
@@ -46,6 +48,7 @@ export const authComponentModules = [
   MatFormFieldModule,
   MatInputModule,
   MatIconModule,
+  TranslocoDirective,
 ];
 
 export const settingComponentModules = [
@@ -60,25 +63,33 @@ export const settingComponentModules = [
   MatSnackBarModule,
   MatDialogModule,
   MatChipsModule,
+  TranslocoDirective,
 ];
 
-export const exportDialogComponentModules = [MatDialogModule, MatButtonModule];
+export const exportDialogComponentModules = [
+  MatDialogModule,
+  MatButtonModule,
+  TranslocoDirective,
+];
 
 export const importDialogComponentModules = [
   MatDialogModule,
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
+  TranslocoDirective,
 ];
 
 export const actionCardModificationComponentModules = [
   NgIf,
+  NgForOf,
   FormsModule,
   MatDialogModule,
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
   MatSelectModule,
+  TranslocoDirective,
 ];
 
 export const actionSettingsCardComponentModules = [
@@ -86,12 +97,14 @@ export const actionSettingsCardComponentModules = [
   MatButtonModule,
   MatIconModule,
   MatDividerModule,
+  TranslocoDirective,
 ];
 
 export const actionDashboardCardComponentModules = [
   MatCardModule,
   MatButtonModule,
   MatIconModule,
+  TranslocoDirective,
 ];
 
 export const dashboardComponentModules = [
@@ -100,6 +113,7 @@ export const dashboardComponentModules = [
   KeyValuePipe,
   MatIconModule,
   MatDividerModule,
+  TranslocoDirective,
 ];
 
 export const historyComponentModules = [
@@ -112,4 +126,5 @@ export const historyComponentModules = [
   MatButtonModule,
   MatIconModule,
   MatChipsModule,
+  TranslocoDirective,
 ];

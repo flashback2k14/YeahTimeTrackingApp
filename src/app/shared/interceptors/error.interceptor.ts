@@ -1,17 +1,19 @@
 import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, catchError, of, throwError } from 'rxjs';
+
+import { Observable, catchError, throwError } from 'rxjs';
+
+import { NotificationService } from 'src/app/core/notification.service';
 
 export function errorInterceptor(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> {
-  const snackbar = inject(MatSnackBar);
+  const notification = inject(NotificationService);
 
   return next(req).pipe(
     catchError((err) => {
-      snackbar.open(err?.error?.message ?? 'Unknown error.', 'Done');
+      notification.showError(err);
       return throwError(() => err);
     })
   );

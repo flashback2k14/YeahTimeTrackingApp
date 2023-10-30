@@ -1,12 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   signal,
 } from '@angular/core';
 
 import { MatChipInputEvent } from '@angular/material/chips';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ActionCardModificationComponent } from './components/action-card-modification/action-card-modification.component';
@@ -26,6 +26,7 @@ import {
   toMap,
   toString,
 } from '@shared/modules';
+import { NotificationService } from 'src/app/core/notification.service';
 
 @Component({
   selector: 'ytt-settings',
@@ -37,7 +38,7 @@ import {
 })
 export class SettingsComponent {
   private readonly dialog = inject(MatDialog);
-  private readonly snackbar = inject(MatSnackBar);
+  private readonly notification = inject(NotificationService);
 
   protected readonly appVersion = inject(APP_VERSION);
 
@@ -45,6 +46,7 @@ export class SettingsComponent {
   protected actionGroups = signal(toArray(StorageKeys.TIME_TRACKING_GROUPS));
   protected actions = signal(toMap(StorageKeys.TIME_TRACKING_ACTIONS));
   protected username = signal(toString(StorageKeys.USER_NAME));
+  protected actionSize = computed(() => this.actions().size);
 
   protected ActionCardModificationType = ActionCardModificationType;
 
@@ -53,7 +55,7 @@ export class SettingsComponent {
    */
 
   handleSaveApiToken(): void {
-    this.snackbar.open('Saving API token...', '', { duration: 1000 });
+    this.notification.show('notification.save.token');
     localStorage.setItem(StorageKeys.API_TOKEN, this.apiToken());
   }
 
@@ -78,7 +80,7 @@ export class SettingsComponent {
   }
 
   handleSaveActionGroups(): void {
-    this.snackbar.open('Saving action groups...', '', { duration: 1000 });
+    this.notification.show('notification.save.groups');
     localStorage.setItem(
       StorageKeys.TIME_TRACKING_GROUPS,
       JSON.stringify(this.actionGroups())
@@ -120,6 +122,7 @@ export class SettingsComponent {
             });
             break;
 
+          case ActionCardModificationType.CANCEL:
           default:
             break;
         }

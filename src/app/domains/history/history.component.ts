@@ -80,7 +80,7 @@ export class HistoryComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.triggerLoad$
       .pipe(
-        startWith(''),
+        startWith(undefined),
         tap(() => this.isLoading.set(true)),
         switchMap(() =>
           this.httpService.get<HistoryResponse>('/history').pipe(
@@ -100,6 +100,10 @@ export class HistoryComponent implements AfterViewInit, OnInit {
         ),
         tap(() => this._resetPaging()),
         tap(() => this.isLoading.set(false)),
+        catchError((err) => {
+          this.isLoading.set(false);
+          return throwError(() => err);
+        }),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
@@ -119,7 +123,7 @@ export class HistoryComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.sort.sortChange
+    this.sort?.sortChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this._resetPaging();

@@ -1,12 +1,12 @@
-<ng-container>
+<ng-container *transloco="let t; read: 'settings.action-card-modification'">
   <h1 mat-dialog-title *ngIf="data.type === ActionCardModificationType.CREATE">
-    Create time tracking action
+    {{ t("title.create") }}
   </h1>
   <h1 mat-dialog-title *ngIf="data.type === ActionCardModificationType.UPDATE">
-    Update {{ data.action.id }} time tracking action
+    {{ t("title.update", { id: data.action.id }) }}
   </h1>
   <h1 mat-dialog-title *ngIf="data.type === ActionCardModificationType.DELETE">
-    Delete time tracking action
+    {{ t("title.delete") }}
   </h1>
 
   <div
@@ -17,25 +17,25 @@
     "
   >
     <mat-form-field appearance="outline">
-      <mat-label>Name</mat-label>
+      <mat-label>{{ t("name.label") }}</mat-label>
       <input
+        matInput
         [(ngModel)]="data.action.name"
-        matInput
-        placeholder="Please enter an action name..."
+        [placeholder]="t('name.placeholder')"
       />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Type</mat-label>
+      <mat-label>{{ t("type.label") }}</mat-label>
       <input
-        [(ngModel)]="data.action.type"
         matInput
-        placeholder="Please enter an action type..."
+        [(ngModel)]="data.action.type"
+        [placeholder]="t('type.placeholder')"
       />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Select an action group</mat-label>
+      <mat-label>{{ t("group.label") }}</mat-label>
       <mat-select [(value)]="data.action.group">
-        <mat-option>None</mat-option>
+        <mat-option>{{ t("group.default-value") }}</mat-option>
         <mat-option
           *ngFor="let actionGroup of actionGroups()"
           [value]="actionGroup"
@@ -49,11 +49,15 @@
     mat-dialog-content
     *ngIf="data.type === ActionCardModificationType.DELETE"
   >
-    <p>Are you sure to delete your action with id {{ data.action.id }}?</p>
+    <p>{{ t("delete.desc", { id: data.action.id }) }}</p>
   </div>
 
   <div mat-dialog-actions align="end">
-    <button mat-button (click)="handleCancel()">Cancel</button>
-    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+    <button mat-button (click)="handleCancel()">
+      {{ t("buttons.cancel") }}
+    </button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>
+      {{ t("buttons.ok") }}
+    </button>
   </div>
 </ng-container>

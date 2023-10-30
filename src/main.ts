@@ -1,5 +1,5 @@
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { enableProdMode, importProvidersFrom, isDevMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideServiceWorker } from '@angular/service-worker';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,6 +16,9 @@ import { environment } from './environments/environment';
 import { API_BASE_URL, APP_VERSION } from './app/shared';
 import { APP_ROUTES } from './app/app.routes';
 import { errorInterceptor } from './app/shared/interceptors/error.interceptor';
+import { TranslocoHttpLoader } from './transloco-loader';
+import { provideTransloco } from '@ngneat/transloco';
+import { provideServices } from './app/core';
 
 if (environment.production) {
   enableProdMode();
@@ -35,6 +38,16 @@ bootstrapApplication(RootComponent, {
     importProvidersFrom(MatSnackBarModule),
     provideRouter(APP_ROUTES, withEnabledBlockingInitialNavigation()),
     provideHttpClient(withInterceptors([errorInterceptor])),
+    provideTransloco({
+      config: {
+        availableLangs: ['en'],
+        defaultLang: 'en',
+        // Remove this option if your application doesn't support changing language in runtime.
+        reRenderOnLangChange: true,
+        prodMode: !isDevMode(),
+      },
+      loader: TranslocoHttpLoader,
+    }),
     provideAnimations(),
     provideServiceWorker('ngsw-worker.js', {
       enabled: environment.production,
@@ -42,5 +55,6 @@ bootstrapApplication(RootComponent, {
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000',
     }),
+    provideServices(),
   ],
 });
