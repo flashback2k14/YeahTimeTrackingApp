@@ -117,6 +117,7 @@ export interface HistoryTask {
 
 export interface HistoryResponse {
   historyTasks: HistoryTask[];
+  nextCursor: string;
 }
 
 export class HistoryItem {

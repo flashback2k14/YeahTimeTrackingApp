@@ -52,6 +52,7 @@ export class HistoryComponent implements AfterViewInit, OnInit {
   private data = signal([] as HistoryItem[]);
   private pageStart = signal(0);
   private pageEnd = signal(0);
+  private nextCursor = signal<string | undefined>(undefined);
 
   protected displayedColumns = signal([
     'index',
@@ -83,22 +84,24 @@ export class HistoryComponent implements AfterViewInit, OnInit {
         startWith(undefined),
         tap(() => this.isLoading.set(true)),
         switchMap(() =>
-          this.httpService.get<HistoryResponse>('/history').pipe(
+          this.httpService.get<HistoryResponse>(this.getUrl()).pipe(
             catchError((error) => throwError(() => error)),
             takeUntilDestroyed(this.destroyRef)
           )
         ),
+        tap((data: HistoryResponse) => this.nextCursor.set(data.nextCursor)),
         tap((data: HistoryResponse) =>
-          this.resultsLength.set(data.historyTasks.length)
+          this.data.update((list) => {
+            list.push(
+              ...data.historyTasks.map((task: HistoryTask, index: number) =>
+                HistoryItem.create(task, index)
+              )
+            );
+            return list;
+          })
         ),
-        tap((data: HistoryResponse) =>
-          this.data.set(
-            data.historyTasks.map((task: HistoryTask, index: number) =>
-              HistoryItem.create(task, index)
-            )
-          )
-        ),
-        tap(() => this._resetPaging()),
+        tap(() => this.resultsLength.set(this.data().length)),
+        tap(() => this.resetPaging()),
         tap(() => this.isLoading.set(false)),
         catchError((err) => {
           this.isLoading.set(false);
@@ -126,11 +129,11 @@ export class HistoryComponent implements AfterViewInit, OnInit {
     this.sort?.sortChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this._resetPaging();
+        this.resetPaging();
       });
   }
 
-  handleReload(): void {
+  handleLoadMore(): void {
     this.triggerLoad$.next();
   }
 
@@ -138,10 +141,19 @@ export class HistoryComponent implements AfterViewInit, OnInit {
     this.triggerPaging$.next(event);
   }
 
-  private _resetPaging(): void {
+  private resetPaging(): void {
     this.paginator.pageIndex = 0;
 
     this.pageStart.set(0);
     this.pageEnd.set(this.paginator.pageSize);
+  }
+
+  private getUrl(): string {
+    const cursor = this.nextCursor();
+    if (cursor) {
+      return '/history-paged?cursor=' + cursor;
+    }
+
+    return '/history-paged';
   }
 }

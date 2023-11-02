@@ -51,7 +51,7 @@
     "loading": "Loading history actions...",
     "no-data": "No history actions found.",
     "columns": {
-      "reload": "Reload history",
+      "loadMore": "Load more history actions.",
       "modified": "Modified",
       "type": "Type",
       "state": "State",
