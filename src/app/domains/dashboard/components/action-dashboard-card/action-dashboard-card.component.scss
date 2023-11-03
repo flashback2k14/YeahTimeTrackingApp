@@ -1,9 +1,25 @@
-mat-card-actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+mat-card {
+  min-height: 105px;
+
+  & mat-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & mat-icon {
+      scale: 1.3;
+    }
+  }
 }
 
-mat-icon {
-  scale: 1.3;
+@media screen and (max-width: 767px) {
+  mat-card {
+    min-height: 140px;
+  }
+}
+
+@media screen and (max-width: 959px) {
+  mat-card {
+    min-height: 125px;
+  }
 }
