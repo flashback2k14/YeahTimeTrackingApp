@@ -1,28 +1,33 @@
 <ng-container *transloco="let t; read: 'dashboard'">
-  <ytt-loading *ngIf="isLoading()">
-    <h3>{{ t("loading") }}</h3>
-  </ytt-loading>
+  @if (isLoading()) {
+    <ytt-loading>
+      <h3>{{ t("loading") }}</h3>
+    </ytt-loading>
+  }
 
-  <div *ngIf="!isLoading() && actions.size <= 0" class="no-data-container">
-    <mat-icon svgIcon="no-data" style="scale: 2" />
-    <h3>{{ t("no-data") }}</h3>
-  </div>
+  @if (!isLoading() && actions.size <= 0) {
+    <div class="no-data-container">
+      <mat-icon svgIcon="no-data" style="scale: 2" />
+      <h3>{{ t("no-data") }}</h3>
+    </div>
+  }
 
-  <div *ngIf="!isLoading() && actions.size > 0">
-    <ng-container
-      *ngFor="let entry of actions | yttGroupBy : 'group' | keyvalue"
-    >
-      <h2>
-        {{ entry.key }}
-      </h2>
+  @if (!isLoading() && actions.size > 0) {
+    <div>
+      @for (entry of actions | yttGroupBy: "group" | keyvalue; track entry) {
+        <h2>
+          {{ entry.key }}
+        </h2>
 
-      <ul>
-        <ytt-action-dashboard-card
-          *ngFor="let action of entry.value"
-          [action]="action"
-          [isStarted]="action.isStarted"
-        />
-      </ul>
-    </ng-container>
-  </div>
+        <ul>
+          @for (action of entry.value; track action) {
+            <ytt-action-dashboard-card
+              [action]="action"
+              [isStarted]="action.isStarted"
+            />
+          }
+        </ul>
+      }
+    </div>
+  }
 </ng-container>

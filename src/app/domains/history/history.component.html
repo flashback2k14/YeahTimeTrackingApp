@@ -1,7 +1,9 @@
 <ng-container *transloco="let t; read: 'history'">
-  <ytt-loading *ngIf="isLoading()">
-    <h3>{{ t("loading") }}</h3>
-  </ytt-loading>
+  @if (isLoading()) {
+    <ytt-loading>
+      <h3>{{ t("loading") }}</h3>
+    </ytt-loading>
+  }
 
   <div [ngClass]="{ container: true, 'container--hidden': isLoading() }">
     <table

@@ -1,6 +1,6 @@
 {
   "name": "yeah-time-tracking-app",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,17 +10,17 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^17.0.1",
+    "@angular/animations": "^17.0.2",
     "@angular/cdk": "^17.0.0",
-    "@angular/common": "^17.0.1",
-    "@angular/compiler": "^17.0.1",
-    "@angular/core": "^17.0.1",
-    "@angular/forms": "^17.0.1",
+    "@angular/common": "^17.0.2",
+    "@angular/compiler": "^17.0.2",
+    "@angular/core": "^17.0.2",
+    "@angular/forms": "^17.0.2",
     "@angular/material": "^17.0.0",
-    "@angular/platform-browser": "^17.0.1",
-    "@angular/platform-browser-dynamic": "^17.0.1",
-    "@angular/router": "^17.0.1",
-    "@angular/service-worker": "^17.0.1",
+    "@angular/platform-browser": "^17.0.2",
+    "@angular/platform-browser-dynamic": "^17.0.2",
+    "@angular/router": "^17.0.2",
+    "@angular/service-worker": "^17.0.2",
     "@ngneat/transloco": "^6.0.0",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
@@ -29,7 +29,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.0.0",
     "@angular/cli": "~17.0.0",
-    "@angular/compiler-cli": "^17.0.1",
+    "@angular/compiler-cli": "^17.0.2",
     "@types/jasmine": "~5.1.2",
     "@types/node": "^20.9.0",
     "jasmine-core": "~5.1.1",
@@ -38,6 +38,7 @@
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "prettier": "3.1.0",
     "typescript": "~5.2.2"
   }
 }

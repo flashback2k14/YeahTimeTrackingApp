@@ -30,4 +30,12 @@ fieldset {
       width: 250px;
     }
   }
+
+  @media screen and (max-width: 767px) {
+    ul {
+      ytt-action-settings-card {
+        width: 100%;
+      }
+    }
+  }
 }

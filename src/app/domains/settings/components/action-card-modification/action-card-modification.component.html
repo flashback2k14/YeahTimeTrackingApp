@@ -1,56 +1,60 @@
 <ng-container *transloco="let t; read: 'settings.action-card-modification'">
-  <h1 mat-dialog-title *ngIf="data.type === ActionCardModificationType.CREATE">
-    {{ t("title.create") }}
-  </h1>
-  <h1 mat-dialog-title *ngIf="data.type === ActionCardModificationType.UPDATE">
-    {{ t("title.update", { id: data.action.id }) }}
-  </h1>
-  <h1 mat-dialog-title *ngIf="data.type === ActionCardModificationType.DELETE">
-    {{ t("title.delete") }}
-  </h1>
+  @if (data.type === ActionCardModificationType.CREATE) {
+    <h1 mat-dialog-title>
+      {{ t("title.create") }}
+    </h1>
+  }
 
-  <div
-    mat-dialog-content
-    *ngIf="
-      data.type === ActionCardModificationType.CREATE ||
-      data.type === ActionCardModificationType.UPDATE
-    "
-  >
-    <mat-form-field appearance="outline">
-      <mat-label>{{ t("name.label") }}</mat-label>
-      <input
-        matInput
-        [(ngModel)]="data.action.name"
-        [placeholder]="t('name.placeholder')"
-      />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>{{ t("type.label") }}</mat-label>
-      <input
-        matInput
-        [(ngModel)]="data.action.type"
-        [placeholder]="t('type.placeholder')"
-      />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>{{ t("group.label") }}</mat-label>
-      <mat-select [(value)]="data.action.group">
-        <mat-option>{{ t("group.default-value") }}</mat-option>
-        <mat-option
-          *ngFor="let actionGroup of actionGroups()"
-          [value]="actionGroup"
-          >{{ actionGroup }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+  @if (data.type === ActionCardModificationType.UPDATE) {
+    <h1 mat-dialog-title>
+      {{ t("title.update", { id: data.action.id }) }}
+    </h1>
+  }
 
-  <div
-    mat-dialog-content
-    *ngIf="data.type === ActionCardModificationType.DELETE"
-  >
-    <p>{{ t("delete.desc", { id: data.action.id }) }}</p>
-  </div>
+  @if (data.type === ActionCardModificationType.DELETE) {
+    <h1 mat-dialog-title>
+      {{ t("title.delete") }}
+    </h1>
+  }
+
+  @if (
+    data.type === ActionCardModificationType.CREATE ||
+    data.type === ActionCardModificationType.UPDATE
+  ) {
+    <div mat-dialog-content>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ t("name.label") }}</mat-label>
+        <input
+          matInput
+          [(ngModel)]="data.action.name"
+          [placeholder]="t('name.placeholder')"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ t("type.label") }}</mat-label>
+        <input
+          matInput
+          [(ngModel)]="data.action.type"
+          [placeholder]="t('type.placeholder')"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ t("group.label") }}</mat-label>
+        <mat-select [(value)]="data.action.group">
+          <mat-option>{{ t("group.default-value") }}</mat-option>
+          @for (actionGroup of actionGroups(); track actionGroup) {
+            <mat-option [value]="actionGroup">{{ actionGroup }} </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  }
+
+  @if (data.type === ActionCardModificationType.DELETE) {
+    <div mat-dialog-content>
+      <p>{{ t("delete.desc", { id: data.action.id }) }}</p>
+    </div>
+  }
 
   <div mat-dialog-actions align="end">
     <button mat-button (click)="handleCancel()">

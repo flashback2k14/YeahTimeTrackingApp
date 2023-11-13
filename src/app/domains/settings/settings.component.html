@@ -29,16 +29,17 @@
     <mat-form-field appearance="outline">
       <mat-label>{{ t("groups.label") }}</mat-label>
       <mat-chip-grid #chipList multiple>
-        <mat-chip-row
-          *ngFor="let actionGroup of actionGroups()"
-          [value]="actionGroup"
-          (removed)="removeActionGroup(actionGroup)"
-        >
-          {{ actionGroup }}
-          <button matChipRemove>
-            <mat-icon>cancel</mat-icon>
-          </button>
-        </mat-chip-row>
+        @for (actionGroup of actionGroups(); track actionGroup) {
+          <mat-chip-row
+            [value]="actionGroup"
+            (removed)="removeActionGroup(actionGroup)"
+          >
+            {{ actionGroup }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        }
         <input
           [placeholder]="t('groups.placeholder')"
           [matChipInputFor]="chipList"
@@ -61,26 +62,31 @@
   <fieldset>
     <legend>{{ t("actions.title") }}</legend>
 
-    <span *ngIf="actionSize() <= 0">{{ t("actions.no-data") }}</span>
+    @if (actionSize() <= 0) {
+      <span>{{ t("actions.no-data") }}</span>
+    }
 
-    <ul *ngIf="actionSize() > 0">
-      <ytt-action-settings-card
-        *ngFor="let action of actions() | keyvalue"
-        [action]="action.value"
-        (edit)="
-          handleOpenActionCardModification(
-            ActionCardModificationType.UPDATE,
-            $event
-          )
-        "
-        (delete)="
-          handleOpenActionCardModification(
-            ActionCardModificationType.DELETE,
-            $event
-          )
-        "
-      />
-    </ul>
+    @if (actionSize() > 0) {
+      <ul>
+        @for (action of actions() | keyvalue; track action.key) {
+          <ytt-action-settings-card
+            [action]="action.value"
+            (edit)="
+              handleOpenActionCardModification(
+                ActionCardModificationType.UPDATE,
+                $event
+              )
+            "
+            (delete)="
+              handleOpenActionCardModification(
+                ActionCardModificationType.DELETE,
+                $event
+              )
+            "
+          />
+        }
+      </ul>
+    }
 
     <button
       mat-flat-button
