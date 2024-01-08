@@ -1,9 +1,10 @@
 import { AUTH_TYPE, HttpService } from './http.service';
-import { inject, Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { StorageKeys } from './../shared';
 import { NotificationService } from './notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export interface LoginResult {
   successful: boolean;
@@ -11,6 +12,7 @@ export interface LoginResult {
 
 @Injectable()
 export class AuthService {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly httpService = inject(HttpService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -33,6 +35,7 @@ export class AuthService {
 
     this.httpService
       .get<LoginResult>('/check-user', AUTH_TYPE.USER)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: LoginResult) => {
         if (value.successful) {
           localStorage.setItem(StorageKeys.USER_LOGGED_IN, 'true');

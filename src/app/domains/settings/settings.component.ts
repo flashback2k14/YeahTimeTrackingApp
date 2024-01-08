@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   inject,
   signal,
 } from '@angular/core';
@@ -27,6 +28,7 @@ import {
   toString,
 } from '@shared/modules';
 import { NotificationService } from 'src/app/core/notification.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'ytt-settings',
@@ -37,6 +39,7 @@ import { NotificationService } from 'src/app/core/notification.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly dialog = inject(MatDialog);
   private readonly notification = inject(NotificationService);
 
@@ -67,7 +70,7 @@ export class SettingsComponent {
     if (event.value) {
       this.actionGroups.update((groups) => {
         groups.push(event.value);
-        return groups;
+        return [...groups];
       });
       event.chipInput!.clear();
     }
@@ -75,7 +78,7 @@ export class SettingsComponent {
 
   removeActionGroup(actionGroup: string): void {
     this.actionGroups.update((groups) =>
-      groups.filter((group: string) => group !== actionGroup)
+      groups.filter((group: string) => group !== actionGroup),
     );
   }
 
@@ -83,7 +86,7 @@ export class SettingsComponent {
     this.notification.show('notification.save.groups');
     localStorage.setItem(
       StorageKeys.TIME_TRACKING_GROUPS,
-      JSON.stringify(this.actionGroups())
+      JSON.stringify(this.actionGroups()),
     );
   }
 
@@ -93,7 +96,7 @@ export class SettingsComponent {
 
   handleOpenActionCardModification(
     type: ActionCardModificationType,
-    action: TimeTrackingAction = createNewTimeTrackingAction()
+    action: TimeTrackingAction = createNewTimeTrackingAction(),
   ): void {
     this.dialog
       .open(ActionCardModificationComponent, {
@@ -105,20 +108,21 @@ export class SettingsComponent {
         } as ActionCardModificationData,
       })
       .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data: ActionCardModificationData) => {
         switch (data.type) {
           case ActionCardModificationType.CREATE:
           case ActionCardModificationType.UPDATE:
             this.actions.update((actions) => {
               actions.set(data.action.id, data.action);
-              return actions;
+              return new Map(actions);
             });
             break;
 
           case ActionCardModificationType.DELETE:
             this.actions.update((actions) => {
               actions.delete(data.action.id);
-              return actions;
+              return new Map(actions);
             });
             break;
 
@@ -129,7 +133,7 @@ export class SettingsComponent {
 
         localStorage.setItem(
           StorageKeys.TIME_TRACKING_ACTIONS,
-          toJson(this.actions())
+          toJson(this.actions()),
         );
       });
   }
@@ -145,6 +149,7 @@ export class SettingsComponent {
         disableClose: true,
       })
       .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.apiToken.set(toString(StorageKeys.API_TOKEN) ?? '');
         this.actionGroups.set(toArray(StorageKeys.TIME_TRACKING_GROUPS));

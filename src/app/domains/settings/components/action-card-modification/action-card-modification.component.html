@@ -21,7 +21,7 @@
     data.type === ActionCardModificationType.CREATE ||
     data.type === ActionCardModificationType.UPDATE
   ) {
-    <div mat-dialog-content>
+    <div mat-dialog-content style="padding-top: 20px">
       <mat-form-field appearance="outline">
         <mat-label>{{ t("name.label") }}</mat-label>
         <input
@@ -51,7 +51,7 @@
   }
 
   @if (data.type === ActionCardModificationType.DELETE) {
-    <div mat-dialog-content>
+    <div mat-dialog-content style="padding-top: 20px">
       <p>{{ t("delete.desc", { id: data.action.id }) }}</p>
     </div>
   }
