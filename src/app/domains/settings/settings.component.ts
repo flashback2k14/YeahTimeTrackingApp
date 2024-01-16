@@ -29,6 +29,8 @@ import {
 } from '@shared/modules';
 import { NotificationService } from 'src/app/core/notification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpService } from 'src/app/core/http.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'ytt-settings',
@@ -40,6 +42,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class SettingsComponent {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly httpService = inject(HttpService);
   private readonly dialog = inject(MatDialog);
   private readonly notification = inject(NotificationService);
 
@@ -50,6 +53,10 @@ export class SettingsComponent {
   protected actions = signal(toMap(StorageKeys.TIME_TRACKING_ACTIONS));
   protected username = signal(toString(StorageKeys.USER_NAME));
   protected actionSize = computed(() => this.actions().size);
+
+  protected apiVersion$ = this.httpService
+    .get<{ version: string }>('/version')
+    .pipe(map((result) => result.version));
 
   protected ActionCardModificationType = ActionCardModificationType;
 

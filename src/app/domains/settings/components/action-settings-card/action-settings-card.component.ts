@@ -20,6 +20,9 @@ import {
         <mat-divider></mat-divider>
         <p>{{ t('type', { type: action?.type }) }}</p>
         <p>{{ t('group', { group: action?.group }) }}</p>
+        @if (action?.withComment) {
+          <p>{{ t('comment-flag') }}</p>
+        }
       </mat-card-content>
 
       <mat-card-actions align="end">

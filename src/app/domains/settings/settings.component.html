@@ -119,6 +119,13 @@
     <legend>{{ t("information.title") }}</legend>
 
     <p>{{ t("information.version", { version: appVersion }) }}</p>
+
+    @if (apiVersion$ | async; as apiVersion) {
+      <p>
+        {{ t("information.apiVersion", { version: apiVersion }) }}
+      </p>
+    }
+
     <p>{{ t("information.username", { username: username() }) }}</p>
   </fieldset>
 </ng-container>

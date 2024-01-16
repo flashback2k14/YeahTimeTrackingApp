@@ -19,13 +19,29 @@ import {
 @Component({
   selector: 'ytt-action-card-modification',
   templateUrl: './action-card-modification.component.html',
+  styles: [
+    `
+      h1 {
+        margin-bottom: 0;
+      }
+
+      mat-dialog-content {
+        padding-top: 20px;
+        padding-bottom: 8px;
+      }
+
+      mat-checkbox {
+        margin-left: -10px;
+      }
+    `,
+  ],
   standalone: true,
   imports: actionCardModificationComponentModules,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActionCardModificationComponent {
   private readonly dialogRef = inject(
-    MatDialogRef<ActionCardModificationComponent>
+    MatDialogRef<ActionCardModificationComponent>,
   );
 
   protected data = inject(MAT_DIALOG_DATA) as ActionCardModificationData;

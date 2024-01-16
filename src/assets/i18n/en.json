@@ -86,7 +86,8 @@
     "action-card": {
       "action": "Action: {{name}}",
       "type": "Type: {{type}}",
-      "group": "Group: {{group}}"
+      "group": "Group: {{group}}",
+      "comment-flag": "With comment"
     },
     "action-card-modification": {
       "title": {
@@ -105,6 +106,10 @@
       "group": {
         "label": "Select an action group",
         "default-value": "None"
+      },
+      "comment": {
+        "label": "Action comment",
+        "text": "Want to enter a comment?"
       },
       "delete": {
         "desc": "Are you sure to delete your action with id: {{id}}?"
@@ -129,6 +134,7 @@
     "information": {
       "title": "Information",
       "version": "App version: {{version}}",
+      "apiVersion": "API version: {{version}}",
       "username": "Username: {{username}}"
     }
   }

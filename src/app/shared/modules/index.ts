@@ -1,5 +1,6 @@
 import { RouterModule } from '@angular/router';
 import {
+  AsyncPipe,
   DatePipe,
   KeyValuePipe,
   NgClass,
@@ -26,6 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TranslocoDirective, TranslocoPipe } from '@ngneat/transloco';
 
 export const rootComponentModules = [
@@ -55,6 +57,7 @@ export const settingComponentModules = [
   NgIf,
   NgForOf,
   KeyValuePipe,
+  AsyncPipe,
   FormsModule,
   MatFormFieldModule,
   MatInputModule,
@@ -89,6 +92,7 @@ export const actionCardModificationComponentModules = [
   MatFormFieldModule,
   MatInputModule,
   MatSelectModule,
+  MatCheckboxModule,
   TranslocoDirective,
 ];
 

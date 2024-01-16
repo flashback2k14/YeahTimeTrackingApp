@@ -24,6 +24,7 @@ export interface TimeTrackingAction {
   name: string;
   type: string;
   group: string;
+  withComment?: boolean;
 }
 
 export interface TimeTrackingActionExtended extends TimeTrackingAction {
