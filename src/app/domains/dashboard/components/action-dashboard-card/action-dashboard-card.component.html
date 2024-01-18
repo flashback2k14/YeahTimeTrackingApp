@@ -1,7 +1,7 @@
 <ng-container *transloco="let t; read: 'action'">
   <mat-card appearance="outlined">
     <mat-card-content>
-      <h4>{{ action.name }}</h4>
+      <h4>{{ action().name }}</h4>
     </mat-card-content>
 
     <!-- TODO: if withComment === true, then show another button and open a input modal for entering the comment -->

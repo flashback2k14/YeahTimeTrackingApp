@@ -1,5 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 
 import { ActionDashboardCardComponent } from './components/action-dashboard-card/action-dashboard-card.component';
 import { AUTH_TYPE, HttpService } from 'src/app/core/http.service';
@@ -27,16 +26,16 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly httpservice = inject(HttpService);
 
   protected isLoading = signal(true);
-  protected actions: Map<string, TimeTrackingActionExtended>;
+  protected actions = signal<Map<string, TimeTrackingActionExtended>>(
+    new Map<string, TimeTrackingActionExtended>(),
+  );
 
-  constructor() {
-    this.actions = new Map<string, TimeTrackingActionExtended>();
-
+  ngOnInit() {
     const settingActions = toMap(StorageKeys.TIME_TRACKING_ACTIONS);
     if (settingActions.size <= 0) {
       this.isLoading.set(false);
@@ -47,18 +46,31 @@ export class DashboardComponent {
       .get<ActiveTasksResponse>('/active-tasks', AUTH_TYPE.API_TOKEN)
       .pipe(
         tap(() => this.isLoading.set(false)),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((response: ActiveTasksResponse) => {
         for (const settingAction of settingActions.values()) {
-          this.actions.set(settingAction.id, {
-            ...settingAction,
-            isStarted:
-              response.active_tasks.findIndex(
-                (activeTask: string) => settingAction.type === activeTask
-              ) != -1,
+          this.actions.update((actions) => {
+            actions.set(settingAction.id, {
+              ...settingAction,
+              isStarted:
+                response.active_tasks.findIndex(
+                  (activeTask: string) => settingAction.type === activeTask,
+                ) != -1,
+            });
+            return new Map(actions);
           });
         }
       });
+  }
+
+  handleStateChanged(action: TimeTrackingActionExtended) {
+    this.actions.update((actions) => {
+      const a = actions.get(action.id);
+      if (a) {
+        a.isStarted = !action.isStarted;
+      }
+      return new Map(actions);
+    });
   }
 }

@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  Input,
+  input,
   Output,
 } from '@angular/core';
 
@@ -16,11 +16,11 @@ import {
   template: `<ng-container *transloco="let t; read: 'settings.action-card'">
     <mat-card appearance="outlined">
       <mat-card-content>
-        <h3>{{ t('action', { name: action?.name }) }}</h3>
+        <h3>{{ t('action', { name: action().name }) }}</h3>
         <mat-divider></mat-divider>
-        <p>{{ t('type', { type: action?.type }) }}</p>
-        <p>{{ t('group', { group: action?.group }) }}</p>
-        @if (action?.withComment) {
+        <p>{{ t('type', { type: action().type }) }}</p>
+        <p>{{ t('group', { group: action().group }) }}</p>
+        @if (action().withComment) {
           <p>{{ t('comment-flag') }}</p>
         }
       </mat-card-content>
@@ -53,15 +53,11 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActionSettingsCardComponent {
-  @Input() action: TimeTrackingAction | undefined;
+  action = input.required<TimeTrackingAction>();
+
   @Output() edit = new EventEmitter<TimeTrackingAction>();
   @Output() delete = new EventEmitter<TimeTrackingAction>();
 
-  handleEdit(): void {
-    this.edit.emit(this.action);
-  }
-
-  handleDelete(): void {
-    this.delete.emit(this.action);
-  }
+  handleEdit = () => this.edit.emit(this.action());
+  handleDelete = () => this.delete.emit(this.action());
 }

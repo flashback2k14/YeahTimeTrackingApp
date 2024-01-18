@@ -6,16 +6,16 @@
     </ytt-loading>
   }
 
-  @if (!isLoading() && actions.size <= 0) {
+  @if (!isLoading() && actions().size <= 0) {
     <div class="no-data-container">
       <mat-icon svgIcon="no-data" style="scale: 2" />
       <h3>{{ t("no-data") }}</h3>
     </div>
   }
 
-  @if (!isLoading() && actions.size > 0) {
+  @if (!isLoading() && actions().size > 0) {
     <div>
-      @for (entry of actions | yttGroupBy: "group" | keyvalue; track entry) {
+      @for (entry of actions() | yttGroupBy: "group" | keyvalue; track entry) {
         <h2>
           {{ entry.key }}
         </h2>
@@ -24,7 +24,7 @@
           @for (action of entry.value; track action) {
             <ytt-action-dashboard-card
               [action]="action"
-              [isStarted]="action.isStarted"
+              (actionStateChanged)="handleStateChanged($event)"
             />
           }
         </ul>

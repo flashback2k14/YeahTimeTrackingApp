@@ -3,19 +3,20 @@ import {
   Component,
   DestroyRef,
   inject,
-  Input,
+  Output,
   OnInit,
-  signal,
+  EventEmitter,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { HttpService } from 'src/app/core/http.service';
 import {
   actionDashboardCardComponentModules,
-  TimeTrackingAction,
+  TimeTrackingActionExtended,
 } from '@shared/modules';
-import { catchError, Subject, switchMap, tap, throwError } from 'rxjs';
+import { catchError, exhaustMap, Subject, tap, throwError } from 'rxjs';
 import { NotificationService } from 'src/app/core/notification.service';
+import { input, computed } from '@angular/core';
 
 @Component({
   selector: 'ytt-action-dashboard-card',
@@ -32,12 +33,10 @@ export class ActionDashboardCardComponent implements OnInit {
 
   private readonly triggerClick$ = new Subject<void>();
 
-  protected started = signal(false);
+  action = input.required<TimeTrackingActionExtended>();
+  started = computed(() => this.action().isStarted);
 
-  @Input() action = {} as TimeTrackingAction;
-  @Input() set isStarted(value: boolean | null | undefined) {
-    this.started.set(value ?? false);
-  }
+  @Output() actionStateChanged = new EventEmitter<TimeTrackingActionExtended>();
 
   ngOnInit(): void {
     this.triggerClick$
@@ -48,24 +47,22 @@ export class ActionDashboardCardComponent implements OnInit {
               ? 'notification.action.stop'
               : 'notification.action.start',
             {
-              name: this.action.name,
+              name: this.action().name,
             },
-            'settings.buttons.ok'
-          )
+            'settings.buttons.ok',
+          ),
         ),
-        switchMap(() =>
-          this.httpservice.create('/add', { type: this.action.type }).pipe(
+        exhaustMap(() =>
+          this.httpservice.create('/add', { type: this.action().type }).pipe(
             catchError((error) => throwError(() => error)),
-            takeUntilDestroyed(this.destroyRef)
-          )
+            takeUntilDestroyed(this.destroyRef),
+          ),
         ),
-        tap(() => this.started.update((state) => !state)),
-        takeUntilDestroyed(this.destroyRef)
+        tap(() => this.actionStateChanged.emit(this.action())),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }
 
-  handleClick(): void {
-    this.triggerClick$.next();
-  }
+  handleClick = () => this.triggerClick$.next();
 }
