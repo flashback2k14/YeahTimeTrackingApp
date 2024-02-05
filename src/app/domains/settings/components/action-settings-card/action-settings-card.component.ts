@@ -46,6 +46,11 @@ import {
       p {
         word-break: break-all;
       }
+
+      [mat-dialog-content] {
+        padding-top: 20px;
+        padding-bottom: 8px;
+      }
     `,
   ],
   standalone: true,

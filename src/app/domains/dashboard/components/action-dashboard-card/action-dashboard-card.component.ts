@@ -14,7 +14,7 @@ import {
   actionDashboardCardComponentModules,
   TimeTrackingActionExtended,
 } from '@shared/modules';
-import { catchError, exhaustMap, Subject, tap, throwError } from 'rxjs';
+import { catchError, exhaustMap, map, Subject, tap, throwError } from 'rxjs';
 import { NotificationService } from 'src/app/core/notification.service';
 import { input, computed } from '@angular/core';
 
@@ -35,6 +35,7 @@ export class ActionDashboardCardComponent implements OnInit {
 
   action = input.required<TimeTrackingActionExtended>();
   started = computed(() => this.action().isStarted);
+  canEnterComment = computed(() => this.action().withComment);
 
   @Output() actionStateChanged = new EventEmitter<TimeTrackingActionExtended>();
 
@@ -52,11 +53,20 @@ export class ActionDashboardCardComponent implements OnInit {
             'settings.buttons.ok',
           ),
         ),
-        exhaustMap(() =>
-          this.httpservice.create('/add', { type: this.action().type }).pipe(
-            catchError((error) => throwError(() => error)),
-            takeUntilDestroyed(this.destroyRef),
-          ),
+        map(() =>
+          this.started()
+            ? null
+            : this.canEnterComment()
+              ? prompt('Please enter your comment:')
+              : null,
+        ),
+        exhaustMap((comment: string | null) =>
+          this.httpservice
+            .create('/add', { type: this.action().type, comment })
+            .pipe(
+              catchError((error) => throwError(() => error)),
+              takeUntilDestroyed(this.destroyRef),
+            ),
         ),
         tap(() => this.actionStateChanged.emit(this.action())),
         takeUntilDestroyed(this.destroyRef),

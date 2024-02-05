@@ -4,7 +4,6 @@
       <h4>{{ action().name }}</h4>
     </mat-card-content>
 
-    <!-- TODO: if withComment === true, then show another button and open a input modal for entering the comment -->
     <mat-card-actions>
       <button
         mat-icon-button
@@ -12,7 +11,15 @@
         title="{{ started() ? t('stop') : t('start') }}"
         (click)="handleClick()"
       >
-        <mat-icon svgIcon="{{ started() ? 'stop' : 'play' }}" />
+        <mat-icon
+          svgIcon="{{
+            started()
+              ? 'stop'
+              : canEnterComment()
+                ? 'play-with-comment'
+                : 'play'
+          }}"
+        />
       </button>
     </mat-card-actions>
   </mat-card>

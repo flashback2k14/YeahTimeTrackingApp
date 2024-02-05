@@ -11,8 +11,9 @@ import {
   TimeTrackingActionExtended,
   toMap,
 } from '@shared/modules';
-import { tap } from 'rxjs';
+import { tap, filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ReloadRequest, ReloadService } from 'src/app/core/reload.service';
 
 @Component({
   selector: 'ytt-dashboard',
@@ -29,6 +30,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class DashboardComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly httpservice = inject(HttpService);
+  private readonly reloadService = inject(ReloadService);
 
   protected isLoading = signal(true);
   protected actions = signal<Map<string, TimeTrackingActionExtended>>(
@@ -36,6 +38,29 @@ export class DashboardComponent implements OnInit {
   );
 
   ngOnInit() {
+    this.reloadService.reloadRequest$
+      .pipe(
+        filter((request: ReloadRequest) => request === 'dashboard'),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this.load());
+
+    this.load();
+  }
+
+  handleStateChanged(action: TimeTrackingActionExtended) {
+    this.actions.update((actions) => {
+      const foundAction = actions.get(action.id);
+      if (foundAction) {
+        foundAction.isStarted = !action.isStarted;
+      }
+      return new Map(actions);
+    });
+  }
+
+  private load(): void {
+    this.isLoading.set(true);
+
     const settingActions = toMap(StorageKeys.TIME_TRACKING_ACTIONS);
     if (settingActions.size <= 0) {
       this.isLoading.set(false);
@@ -62,15 +87,5 @@ export class DashboardComponent implements OnInit {
           });
         }
       });
-  }
-
-  handleStateChanged(action: TimeTrackingActionExtended) {
-    this.actions.update((actions) => {
-      const a = actions.get(action.id);
-      if (a) {
-        a.isStarted = !action.isStarted;
-      }
-      return new Map(actions);
-    });
   }
 }

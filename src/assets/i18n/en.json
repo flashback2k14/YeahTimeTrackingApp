@@ -2,7 +2,11 @@
   "nav": {
     "dashboard": "Dashboard",
     "history": "History",
-    "settings": "Settings"
+    "settings": "Settings",
+    "actions": {
+      "reload": "Reload",
+      "logout": "Logout"
+    }
   },
   "footer": {
     "me": "Developed by flashback2k14"
@@ -87,7 +91,7 @@
       "action": "Action: {{name}}",
       "type": "Type: {{type}}",
       "group": "Group: {{group}}",
-      "comment-flag": "With comment"
+      "comment-flag": "Comments allowed."
     },
     "action-card-modification": {
       "title": {
@@ -109,7 +113,7 @@
       },
       "comment": {
         "label": "Action comment",
-        "text": "Want to enter a comment?"
+        "text": "Do you want to enter a comment?"
       },
       "delete": {
         "desc": "Are you sure to delete your action with id: {{id}}?"

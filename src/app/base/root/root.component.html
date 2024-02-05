@@ -27,7 +27,20 @@
         </nav>
         <span class="spacer"></span>
         @if (authService.isLoggedIn()) {
-          <button mat-icon-button title="Logout" (click)="authService.logout()">
+          <button
+            mat-icon-button
+            title="{{ 'nav.actions.reload' | transloco }}"
+            class="button-right"
+            (click)="handleReload()"
+          >
+            <mat-icon svgIcon="reload" />
+          </button>
+
+          <button
+            mat-icon-button
+            title="{{ 'nav.actions.logout' | transloco }}"
+            (click)="authService.logout()"
+          >
             <mat-icon>logout</mat-icon>
           </button>
         }

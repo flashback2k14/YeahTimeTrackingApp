@@ -32,6 +32,10 @@
     .spacer {
       flex: 1 1 auto;
     }
+
+    .button-right {
+      margin-right: 8px;
+    }
   }
   
   mat-sidenav-container { 
@@ -100,6 +104,10 @@
       
       nav {
         display: none;
+      }
+
+      .button-right {
+        margin-right: 4px;
       }
     }
     

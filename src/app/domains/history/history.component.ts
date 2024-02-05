@@ -9,7 +9,6 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -26,9 +25,11 @@ import {
   startWith,
   switchMap,
   tap,
+  filter,
   throwError,
 } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ReloadRequest, ReloadService } from 'src/app/core/reload.service';
 
 // https://material.angular.io/components/table/examples
 // https://www.youtube.com/watch?v=2oTyoD3qCog
@@ -45,6 +46,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class HistoryComponent implements AfterViewInit, OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly httpService = inject(HttpService);
+  private readonly reloadService = inject(ReloadService);
 
   private readonly triggerLoad$ = new Subject<void>();
   private readonly triggerPaging$ = new Subject<PageEvent>();
@@ -79,6 +81,13 @@ export class HistoryComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit(): void {
+    this.reloadService.reloadRequest$
+      .pipe(
+        filter((request: ReloadRequest) => request === 'history'),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this.triggerLoad$.next());
+
     this.triggerLoad$
       .pipe(
         startWith(undefined),
@@ -86,19 +95,19 @@ export class HistoryComponent implements AfterViewInit, OnInit {
         switchMap(() =>
           this.httpService.get<HistoryResponse>(this.getUrl()).pipe(
             catchError((error) => throwError(() => error)),
-            takeUntilDestroyed(this.destroyRef)
-          )
+            takeUntilDestroyed(this.destroyRef),
+          ),
         ),
         tap((data: HistoryResponse) => this.nextCursor.set(data.nextCursor)),
         tap((data: HistoryResponse) =>
           this.data.update((list) => {
             list.push(
               ...data.historyTasks.map((task: HistoryTask, index: number) =>
-                HistoryItem.create(task, index)
-              )
+                HistoryItem.create(task, index),
+              ),
             );
             return list;
-          })
+          }),
         ),
         tap(() => this.resultsLength.set(this.data().length)),
         tap(() => this.resetPaging()),
@@ -107,7 +116,7 @@ export class HistoryComponent implements AfterViewInit, OnInit {
           this.isLoading.set(false);
           return throwError(() => err);
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
 
@@ -120,7 +129,7 @@ export class HistoryComponent implements AfterViewInit, OnInit {
           this.pageStart.set(start);
           this.pageEnd.set(end);
         }),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }

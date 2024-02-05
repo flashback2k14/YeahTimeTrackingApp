@@ -1,13 +1,15 @@
 import { DomSanitizer } from '@angular/platform-browser';
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatIconRegistry } from '@angular/material/icon';
 
 import { AuthService } from 'src/app/core/auth.service';
 import { rootComponentModules } from '@shared/modules';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, flatten } from '@ngneat/transloco';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ReloadRequest, ReloadService } from 'src/app/core/reload.service';
+import { Location } from '@angular/common';
 
 type Link = {
   href: string;
@@ -24,6 +26,8 @@ type Link = {
 export class RootComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly iconRegistry = inject(MatIconRegistry);
+  private readonly location = inject(Location);
+  private readonly reloadService = inject(ReloadService);
   private readonly router = inject(Router);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly translator = inject(TranslocoService);
@@ -61,66 +65,79 @@ export class RootComponent implements OnInit {
     this.router.navigate([this.links()[0].href]);
   }
 
+  handleReload = () => {
+    this.reloadService.trigger(
+      this.location.path(false).slice(1) as ReloadRequest,
+    );
+  };
+
   private _initIcons(): void {
     this.iconRegistry.addSvgIcon(
       'download',
       this.sanitizer.bypassSecurityTrustResourceUrl(
-        '../assets/svg/cloud-download-outline.svg'
-      )
+        '../assets/svg/cloud-download-outline.svg',
+      ),
     );
 
     this.iconRegistry.addSvgIcon(
       'upload',
       this.sanitizer.bypassSecurityTrustResourceUrl(
-        '../assets/svg/cloud-upload-outline.svg'
-      )
+        '../assets/svg/cloud-upload-outline.svg',
+      ),
     );
 
     this.iconRegistry.addSvgIcon(
       'save',
       this.sanitizer.bypassSecurityTrustResourceUrl(
-        '../assets/svg/content-save-outline.svg'
-      )
+        '../assets/svg/content-save-outline.svg',
+      ),
     );
 
     this.iconRegistry.addSvgIcon(
       'no-data',
       this.sanitizer.bypassSecurityTrustResourceUrl(
-        '../assets/svg/database-off-outline.svg'
-      )
+        '../assets/svg/database-off-outline.svg',
+      ),
     );
 
     this.iconRegistry.addSvgIcon(
       'delete',
       this.sanitizer.bypassSecurityTrustResourceUrl(
-        '../assets/svg/delete-outline.svg'
-      )
+        '../assets/svg/delete-outline.svg',
+      ),
     );
 
     this.iconRegistry.addSvgIcon(
       'edit',
       this.sanitizer.bypassSecurityTrustResourceUrl(
-        '../assets/svg/pencil-outline.svg'
-      )
+        '../assets/svg/pencil-outline.svg',
+      ),
     );
 
     this.iconRegistry.addSvgIcon(
       'play',
       this.sanitizer.bypassSecurityTrustResourceUrl(
-        '../assets/svg/timer-play-outline.svg'
-      )
+        '../assets/svg/timer-play-outline.svg',
+      ),
+    );
+
+    this.iconRegistry.addSvgIcon(
+      'play-with-comment',
+      this.sanitizer.bypassSecurityTrustResourceUrl(
+        '../assets/svg/timer-edit-outline.svg',
+      ),
     );
 
     this.iconRegistry.addSvgIcon(
       'stop',
       this.sanitizer.bypassSecurityTrustResourceUrl(
-        '../assets/svg/timer-stop-outline.svg'
-      )
+        '../assets/svg/timer-stop-outline.svg',
+      ),
     );
 
     this.iconRegistry.addSvgIcon(
       'reload',
-      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/svg/reload.svg')
+      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/svg/reload.svg'),
     );
   }
 }

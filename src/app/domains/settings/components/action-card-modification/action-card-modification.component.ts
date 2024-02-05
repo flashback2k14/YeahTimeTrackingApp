@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Inject,
   inject,
   signal,
 } from '@angular/core';
@@ -25,7 +24,7 @@ import {
         margin-bottom: 0;
       }
 
-      mat-dialog-content {
+      [mat-dialog-content] {
         padding-top: 20px;
         padding-bottom: 8px;
       }
