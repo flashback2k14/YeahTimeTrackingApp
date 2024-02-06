@@ -42,23 +42,30 @@ export class ActionDashboardCardComponent implements OnInit {
   ngOnInit(): void {
     this.triggerClick$
       .pipe(
-        tap(() =>
-          this.notification.show(
-            this.started()
-              ? 'notification.action.stop'
-              : 'notification.action.start',
-            {
-              name: this.action().name,
-            },
-            'settings.buttons.ok',
-          ),
-        ),
         map(() =>
           this.started()
             ? null
             : this.canEnterComment()
-              ? prompt('Please enter your comment:')
+              ? prompt('Please enter your comment:', '')
               : null,
+        ),
+        tap((comment: string | null) =>
+          this.notification.show(
+            this.started()
+              ? comment
+                ? 'notification.start-with-comment'
+                : 'notification.action.stop'
+              : 'notification.action.start',
+            comment
+              ? {
+                  name: this.action().name,
+                  comment,
+                }
+              : {
+                  name: this.action().name,
+                },
+            'settings.buttons.ok',
+          ),
         ),
         exhaustMap((comment: string | null) =>
           this.httpservice

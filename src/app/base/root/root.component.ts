@@ -1,12 +1,12 @@
 import { DomSanitizer } from '@angular/platform-browser';
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { MatIconRegistry } from '@angular/material/icon';
 
 import { AuthService } from 'src/app/core/auth.service';
 import { rootComponentModules } from '@shared/modules';
-import { TranslocoService, flatten } from '@ngneat/transloco';
+import { TranslocoService } from '@ngneat/transloco';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReloadRequest, ReloadService } from 'src/app/core/reload.service';
 import { Location } from '@angular/common';
@@ -61,15 +61,12 @@ export class RootComponent implements OnInit {
     this._initIcons();
   }
 
-  goToHome(): void {
-    this.router.navigate([this.links()[0].href]);
-  }
+  goToHome = () => this.router.navigate([this.links()[0].href]);
 
-  handleReload = () => {
+  handleReload = () =>
     this.reloadService.trigger(
       this.location.path(false).slice(1) as ReloadRequest,
     );
-  };
 
   private _initIcons(): void {
     this.iconRegistry.addSvgIcon(

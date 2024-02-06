@@ -19,6 +19,7 @@
     },
     "action": {
       "start": "Start action: {{name}}.",
+      "start-with-comment": "Start action: {{name}} - {{comment}}.",
       "stop": "Stop action: {{name}}."
     },
     "save": {
