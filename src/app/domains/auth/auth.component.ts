@@ -1,8 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  computed,
   inject,
   signal,
+  viewChild,
 } from '@angular/core';
 
 import { AuthService } from 'src/app/core/auth.service';
@@ -19,13 +22,25 @@ import { authComponentModules } from '@shared/modules';
 export class AuthComponent {
   private readonly authService = inject(AuthService);
 
-  protected hidePassword = signal(true);
+  private readonly usernameInput =
+    viewChild<ElementRef<HTMLInputElement>>('username');
+  private readonly passwortInput =
+    viewChild<ElementRef<HTMLInputElement>>('password');
 
-  toggle(): void {
-    this.hidePassword.update((value) => !value);
-  }
+  private readonly hidePassword = signal(true);
 
-  handleLogin(username: string, password: string): void {
-    this.authService.login(username, password);
-  }
+  protected readonly inputType = computed(() =>
+    this.hidePassword() ? 'password' : 'text',
+  );
+  protected readonly passwordVisibilityIcon = computed(() =>
+    this.hidePassword() ? 'visibility_off' : 'visibility',
+  );
+
+  toggle = () => this.hidePassword.update((value) => !value);
+
+  handleLogin = () =>
+    this.authService.login(
+      this.usernameInput()?.nativeElement.value ?? '',
+      this.passwortInput()?.nativeElement.value ?? '',
+    );
 }
