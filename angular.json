@@ -20,7 +20,7 @@
       "prefix": "ytt",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
             "outputPath": "dist/yeah-time-tracking-app",
             "index": "src/index.html",
@@ -77,6 +77,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "forceEsbuild": true
+          },
           "configurations": {
             "production": {
               "buildTarget": "YeahTimeTrackingApp:build:production"
