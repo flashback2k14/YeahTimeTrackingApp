@@ -1,4 +1,11 @@
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  OnInit,
+  inject,
+  signal,
+} from '@angular/core';
 
 import { ActionDashboardCardComponent } from './components/action-dashboard-card/action-dashboard-card.component';
 import { AUTH_TYPE, HttpService } from 'src/app/core/http.service';
@@ -26,6 +33,7 @@ import { ReloadRequest, ReloadService } from 'src/app/core/reload.service';
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
@@ -41,9 +49,10 @@ export class DashboardComponent implements OnInit {
     this.reloadService.reloadRequest$
       .pipe(
         filter((request: ReloadRequest) => request === 'dashboard'),
+        tap(() => this.load()),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(() => this.load());
+      .subscribe();
 
     this.load();
   }
