@@ -3,9 +3,8 @@ import {
   Component,
   DestroyRef,
   inject,
-  Output,
   OnInit,
-  EventEmitter,
+  output,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -34,10 +33,10 @@ export class ActionDashboardCardComponent implements OnInit {
   private readonly triggerClick$ = new Subject<void>();
 
   action = input.required<TimeTrackingActionExtended>();
+  actionStateChanged = output<TimeTrackingActionExtended>();
+
   started = computed(() => this.action().isStarted);
   canEnterComment = computed(() => this.action().withComment);
-
-  @Output() actionStateChanged = new EventEmitter<TimeTrackingActionExtended>();
 
   ngOnInit(): void {
     this.triggerClick$

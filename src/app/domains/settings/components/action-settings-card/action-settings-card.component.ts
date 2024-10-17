@@ -1,10 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   input,
-  Output,
-} from '@angular/core';
+  output
+} from "@angular/core";
 
 import {
   actionSettingsCardComponentModules,
@@ -59,9 +58,8 @@ import {
 })
 export class ActionSettingsCardComponent {
   action = input.required<TimeTrackingAction>();
-
-  @Output() edit = new EventEmitter<TimeTrackingAction>();
-  @Output() delete = new EventEmitter<TimeTrackingAction>();
+  edit = output<TimeTrackingAction>();
+  delete = output<TimeTrackingAction>();
 
   handleEdit = () => this.edit.emit(this.action());
   handleDelete = () => this.delete.emit(this.action());

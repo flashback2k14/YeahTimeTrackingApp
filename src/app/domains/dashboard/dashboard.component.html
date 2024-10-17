@@ -20,7 +20,7 @@
         </h2>
 
         <ul>
-          @for (action of entry.value; track action) {
+          @for (action of entry.value; track action.id) {
             <ytt-action-dashboard-card
               [action]="action"
               (actionStateChanged)="handleStateChanged($event)"
